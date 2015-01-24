@@ -1,0 +1,45 @@
+﻿
+#ifndef _GAME_MANAGER_H_
+#define _GAME_MANAGER_H_
+
+#include "cocos2d.h"
+
+
+class GameManager
+{
+public:
+	static GameManager*		getInstance();
+	static void				releaseInstance();
+
+	int						getPopulation();
+	int						getFood();
+	int						getResource();
+	int						getCulture();
+	int						getCivilization();
+	int						getYear();
+	int						getMonth();
+	void					turnStart(cocos2d::Layer* runningLayer);
+	void					turnEnd();
+	void					gameStart();
+	void					setChatting(bool chat);
+	bool					isChatting();
+private:
+	GameManager();
+	~GameManager();
+
+	static GameManager* m_Instance;
+
+	int m_Population;
+	int m_Food;
+	int m_Resource;
+	int m_Culture;
+	int m_Civilization;
+	int m_Year;
+	int m_Month;
+	bool m_IsChatting;
+
+	//몇 번째 차례인지. 겉으로 보이긴 year / month 가 기준이지만 실제로는 이 turn을 바탕으로 시뮬레이션 수행.
+	int m_Turn;
+};
+
+#endif

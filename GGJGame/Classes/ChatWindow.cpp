@@ -29,7 +29,7 @@ bool ChatWindow::init()
 		return false;
 	}
 
-	m_WindowSprite = Sprite::create("chat_window.png");
+	m_WindowSprite = Sprite::create("graphic\\chat_window.png");
 	addChild(m_WindowSprite, 0);
 	m_WindowSprite->setPosition(Point(WND_WIDTH / 2, 100));
 
@@ -38,7 +38,7 @@ bool ChatWindow::init()
 	m_ChatLabel->setColor(TEXT_COLOR);
 	m_ChatLabel->setPosition(Point(WND_WIDTH / 2, 90));
 
-	m_NextIcon = Sprite::create("next_icon.png");
+	m_NextIcon = Sprite::create("graphic\\next_icon.png");
 	addChild(m_NextIcon, 2);
 	m_NextIcon->setPosition(Point(WND_WIDTH / 2, 40));
 	m_NextIcon->setVisible(false);
@@ -93,7 +93,7 @@ void ChatWindow::update(float dTime)
 	{
 		if (m_Chats[m_ChatPage][m_OutputIndex] != ' ')
 		{
-			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("typing.wav");
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\typing.wav");
 		}
 		std::string outputStr(&m_Chats[m_ChatPage][0], &m_Chats[m_ChatPage][m_OutputIndex]);
 

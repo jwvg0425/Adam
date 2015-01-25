@@ -48,9 +48,9 @@ GameManager::GameManager()
 	m_CultureFactor = 1.0f;
 	m_EcoFactor = 0;
 	m_IsGameOver = false;
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("click.wav");
-	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("typing.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("sound\\bgm.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sound\\click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("sound\\typing.wav");
 
 	initRegion();
 	initResearch();
@@ -124,7 +124,7 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 		addReport(secondReport);
 		addReport(thirdReport);
 
-		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("sound\\bgm.mp3", true);
 		runningLayer->addChild(
 			ChatWindow::createWithCallback(firstChat, 
 			CC_CALLBACK_0(GameScene::turnStartAction, static_cast<GameScene*>(runningLayer)), 8.0f));
@@ -475,11 +475,6 @@ void GameManager::simulate()
 	if (m_ResearchData[RES_EDUCATION].m_IsCompleted)
 	{
 		m_Technique++;
-	
-		if (m_Turn % 2 == 0)
-		{
-			m_EcoFactor++;
-		}
 	}
 }
 
@@ -509,15 +504,15 @@ void GameManager::completeResearch(ResearchType type)
 		break;
 	case RES_FOOD_1:
 		m_FoodFactor += 1.0f;
-		m_FoodExp += 0.1f;
+		m_FoodExp += 0.05f;
 		break;
 	case RES_FOOD_2:
 		m_FoodFactor += 2.0f;
-		m_FoodExp += 0.15f;
+		m_FoodExp += 0.05f;
 		break;
 	case RES_FOOD_3:
 		m_FoodFactor += 3.0f;
-		m_FoodExp += 0.2f;
+		m_FoodExp += 0.05f;
 		break;
 	case RES_CIVIL_1:
 		m_CivilInc += 2;
@@ -578,7 +573,7 @@ void GameManager::simulatePopulation()
 			}
 			float stableFactor = 100.0f / (m_RegionData[i].m_Stablity + 1);
 			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 8.0f;
-			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.5);
+			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.6);
 
 			populationInc += (wealthFactor - stableFactor - radioactivityFactor)*turnRatio;
 		}
@@ -631,15 +626,15 @@ void GameManager::simulateResource()
 			//개발된지 오래된 지역일 수록 더 많은 영향을 끼침.
 			if (turn > 100)
 			{
-				wealthyFactor = 1.2f;
+				wealthyFactor = 1.0f;
 			}
 			else if (turn > 70)
 			{
-				wealthyFactor = 1.0f;
+				wealthyFactor = 0.9f;
 			}
 			else if (turn > 50)
 			{
-				wealthyFactor = 0.8f;
+				wealthyFactor = 0.7f;
 			}
 			else if (turn > 30)
 			{
@@ -651,10 +646,10 @@ void GameManager::simulateResource()
 			}
 			else
 			{
-				wealthyFactor = 0.2f;
+				wealthyFactor = 0.3f;
 			}
 
-			resourceIncrease += m_RegionData[i].m_Wealthy*wealthyFactor*0.5;
+			resourceIncrease += pow(m_RegionData[i].m_Wealthy, 0.7)*wealthyFactor;
 		}
 	}
 
@@ -880,7 +875,7 @@ void GameManager::simulateRegion()
 
 			char content[255];
 			sprintf(content, "%s 지역의 개척에 실패했습니다... 그 과정에서 %d명의 사람이 죽었고,"
-				"%d만큼의 식량이 손실됐으며, %d만큼의 자원도 잃었습니다. 정말 크나큰 손실을 입었네요..", m_RegionData[m_SurveyRegion].m_Name.c_str(),
+				"%d만큼의 식량이 손실됐으며, %d만큼의 자원도 잃었습니다. 정말 크나큰 손실을 입었네요..", m_RegionData[m_DevelopRegion].m_Name.c_str(),
 				populationDesc, foodDesc, resourceDesc);
 
 			ReportData report("개척 실패", content, m_Year, m_Month);
@@ -925,8 +920,8 @@ void GameManager::simulateEvent()
 		{
 			if (data.m_Radioactivity > 1000)
 			{
-				//50%확률로 방사능으로 인한 인구 감소 현상 발생
-				if (rand() % 100 < 50)
+				//20%확률로 방사능으로 인한 인구 감소 현상 발생
+				if (rand() % 100 < 20)
 				{
 					int desc = (data.m_Radioactivity / 10) + rand() % (data.m_Radioactivity / 100 + 1);
 					m_Population -= desc;
@@ -945,28 +940,28 @@ void GameManager::simulateEvent()
 			//기후가 불안정할 경우 여러가지 현상 발생
 			if (data.m_Stablity < 200)
 			{
-				//10% 확률로 태풍, 5% 확률로 폭우 및 홍수, 5% 확률로 극심한 가뭄
+				//5% 확률로 태풍, 5% 확률로 폭우 및 홍수, 5% 확률로 극심한 가뭄
 				int prob = rand() % 100;
 				int popl;
 				int food;
 				int resc;
 				std::string dis;
 
-				if (prob < 10)
+				if (prob < 5)
 				{
 					dis = "갑자기 불어닥친 태풍으";
 					popl = 40 + rand() % 20;
 					food = 80 + rand() % 40;
 					resc = 30 + rand() % 20;
 				}
-				else if (prob < 15)
+				else if (prob < 10)
 				{
 					dis = "급작스런 폭우 및 그로 인한 홍수";
 					popl = 10 + rand() % 10;
 					food = 110 + rand() % 60;
 					resc = 40 + rand() % 30;
 				}
-				else if (prob < 20)
+				else if (prob < 15)
 				{
 					dis = "한 달간 비 한 방울 내리지 않은 극심한 가뭄으";
 					popl = 30 + rand() % 20;
@@ -974,7 +969,7 @@ void GameManager::simulateEvent()
 					resc = 10 + rand() % 10;
 				}
 
-				if (prob< 20)
+				if (prob< 15)
 				{
 
 					if (popl>m_Population)
@@ -1017,6 +1012,8 @@ void GameManager::simulateEvent()
 					if (popl>m_Population)
 						popl = m_Population;
 
+					m_Population -= popl;
+
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
@@ -1039,6 +1036,8 @@ void GameManager::simulateEvent()
 
 					if (popl>m_Population)
 						popl = m_Population;
+
+					m_Population -= popl;
 
 					char content[255];
 
@@ -1063,6 +1062,8 @@ void GameManager::simulateEvent()
 					if (popl>m_Population)
 						popl = m_Population;
 
+					m_Population -= popl;
+
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
@@ -1086,6 +1087,8 @@ void GameManager::simulateEvent()
 
 					if (popl>m_Population)
 						popl = m_Population;
+
+					m_Population -= popl;
 
 					char content[255];
 

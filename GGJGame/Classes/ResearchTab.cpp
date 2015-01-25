@@ -21,7 +21,7 @@ ResearchTab::~ResearchTab()
 
 bool ResearchTab::init()
 {
-	if (!Tab::initWithCaptionAndIcon("research", "research_icon.png"))
+	if (!Tab::initWithCaptionAndIcon("research", "graphic\\research_icon.png"))
 	{
 		return false;
 	}
@@ -87,7 +87,7 @@ bool ResearchTab::init()
 	addChild(m_ResearchDescLabel);
 	addChild(m_ResearchResourceLabel);
 
-	auto confirm = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(ResearchTab::confirmResearchCallback, this));
+	auto confirm = MenuItemImage::create("graphic\\button.png", "graphic\\button_down.png", CC_CALLBACK_1(ResearchTab::confirmResearchCallback, this));
 	auto label = Label::createWithSystemFont("연구", TEXT_FONT, 20);
 	label->setColor(TEXT_COLOR);
 	label->setPosition(48, 16);
@@ -118,13 +118,13 @@ bool ResearchTab::init()
 
 void ResearchTab::researchIconCallback(Ref* sender)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\click.wav");
 	auto item = static_cast<MenuItem*>(sender);
 	int tag = item->getTag();
 	auto data = GameManager::getInstance()->getResearchData(static_cast<ResearchType>(tag));
 	auto state = data.getStateColor();
 	char resource[255] = { 0, };
-	int period = (data.m_NeedPeriod - data.m_Progress) / GameManager::getInstance()->getTechnique();
+	int period = (data.m_NeedPeriod - data.m_Progress + GameManager::getInstance()->getTechnique() - 1) / GameManager::getInstance()->getTechnique();
 
 	if (period == 0)
 	{
@@ -177,7 +177,7 @@ void ResearchTab::update(float dTime)
 
 void ResearchTab::confirmResearchCallback(Ref* sender)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\click.wav");
 	auto data = GameManager::getInstance()->getResearchData(m_Selected);
 	char confirmStr[255] = { 0, };
 

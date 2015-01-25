@@ -11,23 +11,29 @@ RegionData::RegionData(const std::string& name, const std::string& spriteName, c
 	m_IsDeveloped = false;
 	m_IsKnown = false;
 
-	int type = rand() % 4;
+	int type = rand() % 10;
 
 	switch (type)
 	{
 	case 0: //그나마 살만함
+	case 1:
+	case 2:
+	case 3:
 		m_Radioactivity = 500 + rand() % 500;
 		m_Stablity = rand() % 100;
 		break;
-	case 1: //좀 힘듬
+	case 4: //좀 힘듬
+	case 5:
+	case 6:
 		m_Radioactivity = 1000 + rand() % 1000;
 		m_Stablity = rand() % 50;
 		break;
-	case 2: //상황이 안 좋음
+	case 7: //상황이 안 좋음
+	case 8:
 		m_Radioactivity = 2500 + rand() % 1000;
 		m_Stablity = rand() % 10;
 		break;
-	case 3: //극악의 환경.
+	case 9: //극악의 환경.
 		m_Radioactivity = 4000 + rand() % 1000;
 		m_Stablity = 0;
 	}

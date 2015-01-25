@@ -27,7 +27,7 @@ MapTab::~MapTab()
 
 bool MapTab::init()
 {
-	if (!Tab::initWithCaptionAndIcon("map", "map_icon.png"))
+	if (!Tab::initWithCaptionAndIcon("map", "graphic\\map_icon.png"))
 	{
 		return false;
 	}

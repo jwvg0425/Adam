@@ -27,7 +27,7 @@ bool RegionWindow::init()
 		return false;
 	}
 
-	m_BackgroundImage = Sprite::create("region_window.png");
+	m_BackgroundImage = Sprite::create("graphic\\region_window.png");
 	m_BackgroundImage->setOpacity(192);
 	addChild(m_BackgroundImage);
 
@@ -41,7 +41,7 @@ bool RegionWindow::init()
 	m_DescLabel->setAnchorPoint(Point(0, 1));
 	addChild(m_DescLabel);
 
-	auto button = MenuItemImage::create("button.png", "button.png", CC_CALLBACK_1(RegionWindow::buttonCallback, this));
+	auto button = MenuItemImage::create("graphic\\button.png", "graphic\\button.png", CC_CALLBACK_1(RegionWindow::buttonCallback, this));
 	m_ActLabel = Label::createWithSystemFont("개척", TEXT_FONT, 16);
 	m_ActLabel->setPosition(48, 16);
 	button->addChild(m_ActLabel);
@@ -59,7 +59,7 @@ bool RegionWindow::init()
 
 void RegionWindow::updateInfo(RegionType type)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\click.wav");
 	auto data = GameManager::getInstance()->getRegionData(type);
 	float x = MAP_ORIGIN_X + data.m_Area.getMidX();
 	float y = MAP_ORIGIN_Y - data.m_Area.getMidY();
@@ -202,7 +202,7 @@ void RegionWindow::buttonCallback(cocos2d::Ref* sender)
 {
 	auto parent = static_cast<MapTab*>(getParent());
 
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\click.wav");
 
 	if (m_ActLabel->getString() == "조사")
 	{

@@ -29,13 +29,13 @@ bool GameScene::init()
 		return false;
 	}
 
-	auto background = Sprite::create("background.png");
+	auto background = Sprite::create("graphic\\background.png");
 
 	addChild(background);
 	background->setAnchorPoint(Point(0.5, 0.5));
 	background->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
 
-	m_Black = Sprite::create("black.png");
+	m_Black = Sprite::create("graphic\\black.png");
 	addChild(m_Black);
 	m_Black->setAnchorPoint(Point(0.5, 0.5));
 	m_Black->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
@@ -76,7 +76,7 @@ void GameScene::turnEndAction()
 {
 	setMainUIVisible(false);
 
-	m_Black = Sprite::create("black.png");
+	m_Black = Sprite::create("graphic\\black.png");
 	m_Black->setOpacity(0);
 	m_Black->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
 

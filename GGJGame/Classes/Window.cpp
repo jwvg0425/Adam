@@ -47,7 +47,7 @@ bool Window::init()
 		return false;
 	}
 
-	m_Background = Sprite::create("window.png");
+	m_Background = Sprite::create("graphic\\window.png");
 	addChild(m_Background);
 	m_Background->setPosition(Point(WND_WIDTH / 2, WND_HEIGHT / 2));
 
@@ -57,7 +57,7 @@ bool Window::init()
 	m_CaptionLabel->setPosition(Point(105, 430));
 	m_CaptionLabel->setColor(TEXT_COLOR);
 
-	auto exitButton = MenuItemImage::create("exitButton.png", "exitButton.png", CC_CALLBACK_1(Window::exitButtonCallback, this));
+	auto exitButton = MenuItemImage::create("graphic\\exitButton.png", "graphic\\exitButton.png", CC_CALLBACK_1(Window::exitButtonCallback, this));
 	auto menu = Menu::create(exitButton, nullptr);
 
 	menu->alignItemsVertically();
@@ -65,7 +65,7 @@ bool Window::init()
 
 	addChild(menu);
 
-	m_TabSelectIcon = Sprite::create("tab_icon_selected.png");
+	m_TabSelectIcon = Sprite::create("graphic\\tab_icon_selected.png");
 	addChild(m_TabSelectIcon,1);
 	m_TabSelectIcon->setVisible(false);
 
@@ -79,7 +79,7 @@ void Window::setCaption(std::string caption)
 
 void Window::exitButtonCallback(Ref* sender)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\click.wav");
 	auto parent = static_cast<MainUILayer*>(getParent());
 
 	parent->setUIVisible(true);

@@ -21,12 +21,12 @@ ReportTab::~ReportTab()
 
 bool ReportTab::init()
 {
-	if (!Tab::initWithCaptionAndIcon("article", "report_icon.png"))
+	if (!Tab::initWithCaptionAndIcon("report", "graphic\\report_icon.png"))
 	{
 		return false;
 	}
 
-	m_Contents = Sprite::create("report_contents.png");
+	m_Contents = Sprite::create("graphic\\report_contents.png");
 
 	addChild(m_Contents);
 	m_Contents->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
@@ -65,7 +65,7 @@ void ReportTab::initMenu(int page)
 
 	for (int i = firstIdx; i < reports.size() && i < lastIdx; i++)
 	{
-		auto item = MenuItemImage::create("report_header.png", "report_header.png",CC_CALLBACK_1(ReportTab::headerCallback,this));
+		auto item = MenuItemImage::create("graphic\\report_header.png", "graphic\\report_header.png",CC_CALLBACK_1(ReportTab::headerCallback,this));
 		auto label = Label::createWithSystemFont(reports[i].m_Header, TEXT_FONT, 16);
 		label->setColor(TEXT_COLOR);
 		item->addChild(label);
@@ -84,7 +84,7 @@ void ReportTab::initMenu(int page)
 
 void ReportTab::headerCallback(cocos2d::Ref* sender)
 {
-	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("sound\\click.wav");
 	char date[256];
 	auto item = static_cast<MenuItem*>(sender);
 	int tag = item->getTag();

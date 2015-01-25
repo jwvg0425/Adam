@@ -31,8 +31,8 @@ GameManager::GameManager()
 	m_Civilization = 0;
 	m_Culture = 0;
 	m_Population = 507;
-	m_Food = 3;
-	m_Resource = 5;
+	m_Food = 1000;
+	m_Resource = 100;
 	m_Year = 4000;
 	m_Month = 1;
 	m_Turn = 0;

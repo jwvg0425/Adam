@@ -143,6 +143,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClCompile Include="..\Classes\MapTab.cpp" />
     <ClCompile Include="..\Classes\Region.cpp" />
     <ClCompile Include="..\Classes\ReportTab.cpp" />
+    <ClCompile Include="..\Classes\ResearchTab.cpp" />
     <ClCompile Include="..\Classes\Tab.cpp" />
     <ClCompile Include="..\Classes\Window.cpp" />
     <ClCompile Include="main.cpp" />
@@ -157,6 +158,7 @@ xcopy /Y /Q "$(EngineRoot)external\websockets\prebuilt\win32\*.*" "$(OutDir)"</C
     <ClInclude Include="..\Classes\MapTab.h" />
     <ClInclude Include="..\Classes\Region.h" />
     <ClInclude Include="..\Classes\ReportTab.h" />
+    <ClInclude Include="..\Classes\ResearchTab.h" />
     <ClInclude Include="..\Classes\Tab.h" />
     <ClInclude Include="..\Classes\Window.h" />
     <ClInclude Include="main.h" />

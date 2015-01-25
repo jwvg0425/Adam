@@ -5,6 +5,7 @@
 #include "ChatWindow.h"
 #include "MapTab.h"
 #include "ReportTab.h"
+#include "ResearchTab.h"
 #define UI_X (WND_WIDTH - 5)
 #define UI_Y (WND_HEIGHT - 5)
 
@@ -203,7 +204,9 @@ void MainUILayer::update(float dTime)
 
 void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 {
-	addChild(Window::createWithCaption("research"));
+	ResearchTab* researchTab = ResearchTab::create();
+	Window* window = Window::createWithTabs("research", researchTab, nullptr);
+	addChild(window);
 	setUIVisible(false);
 }
 

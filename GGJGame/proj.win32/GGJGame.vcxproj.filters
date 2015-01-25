@@ -60,6 +60,9 @@
     <ClCompile Include="..\Classes\ReportTab.cpp">
       <Filter>Classes\Tab</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ResearchTab.cpp">
+      <Filter>Classes\Tab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -96,6 +99,9 @@
       <Filter>Classes\Util</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ReportTab.h">
+      <Filter>Classes\Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ResearchTab.h">
       <Filter>Classes\Tab</Filter>
     </ClInclude>
   </ItemGroup>

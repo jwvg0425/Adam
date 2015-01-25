@@ -10,6 +10,21 @@
     <Filter Include="resource">
       <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\Tab">
+      <UniqueIdentifier>{8a05b1f1-ca4c-42c0-a7e3-56cdc52fe3ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Window">
+      <UniqueIdentifier>{0da57f66-781a-4c00-80ce-3bc4be54dd75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Manager">
+      <UniqueIdentifier>{4f631fd5-1ddf-4f85-a732-e624d323df41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Util">
+      <UniqueIdentifier>{4754f3db-710d-42f5-b9f1-97f2374019a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Classes\Scene&amp;Layer">
+      <UniqueIdentifier>{fbf74a59-e0dc-4507-90cd-553b878ec677}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -18,23 +33,26 @@
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>Classes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GameScene.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\GameManager.cpp">
-      <Filter>Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\MainUILayer.cpp">
-      <Filter>Classes</Filter>
+    <ClCompile Include="..\Classes\Tab.cpp">
+      <Filter>Classes\Tab</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Window.cpp">
-      <Filter>Classes</Filter>
+      <Filter>Classes\Window</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\ChatWindow.cpp">
-      <Filter>Classes</Filter>
+      <Filter>Classes\Window</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Tab.cpp">
-      <Filter>Classes</Filter>
+    <ClCompile Include="..\Classes\GameManager.cpp">
+      <Filter>Classes\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GameScene.cpp">
+      <Filter>Classes\Scene&amp;Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MainUILayer.cpp">
+      <Filter>Classes\Scene&amp;Layer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MapTab.cpp">
+      <Filter>Classes\Tab</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,26 +62,29 @@
     <ClInclude Include="..\Classes\AppDelegate.h">
       <Filter>Classes</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GameScene.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\GameManager.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\MainUILayer.h">
-      <Filter>Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\macro.h">
-      <Filter>Classes</Filter>
+    <ClInclude Include="..\Classes\Tab.h">
+      <Filter>Classes\Tab</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Window.h">
-      <Filter>Classes</Filter>
+      <Filter>Classes\Window</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\ChatWindow.h">
-      <Filter>Classes</Filter>
+      <Filter>Classes\Window</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Tab.h">
-      <Filter>Classes</Filter>
+    <ClInclude Include="..\Classes\GameManager.h">
+      <Filter>Classes\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GameScene.h">
+      <Filter>Classes\Scene&amp;Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MainUILayer.h">
+      <Filter>Classes\Scene&amp;Layer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MapTab.h">
+      <Filter>Classes\Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\macro.h">
+      <Filter>Classes\Util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

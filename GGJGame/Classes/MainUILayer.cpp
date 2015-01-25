@@ -3,6 +3,7 @@
 #include "macro.h"
 #include "Window.h"
 #include "ChatWindow.h"
+#include "MapTab.h"
 #define UI_X (WND_WIDTH - 5)
 #define UI_Y (WND_HEIGHT - 5)
 
@@ -112,19 +113,19 @@ bool MainUILayer::init()
 	//버튼 추가
 
 	auto labButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::labButtonCallback, this));
-	auto labLabel = Label::createWithSystemFont("연구", "NanumBarunGothicBold", 16);
+	auto labLabel = Label::createWithSystemFont("연구", TEXT_FONT, 16);
 	labLabel->setColor(TEXT_COLOR);
 	labLabel->setPosition(48, 16);
 	labButton->addChild(labLabel);
 
 	auto orderButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::orderButtonCallback, this));
-	auto orderLabel = Label::createWithSystemFont("명령", "NanumBarunGothicBold", 16);
+	auto orderLabel = Label::createWithSystemFont("명령", TEXT_FONT, 16);
 	orderLabel->setColor(TEXT_COLOR);
 	orderLabel->setPosition(48, 16);
 	orderButton->addChild(orderLabel);
 
 	auto reportButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::reportButtonCallback, this));
-	auto reportLabel = Label::createWithSystemFont("보고서", "NanumBarunGothicBold", 16);
+	auto reportLabel = Label::createWithSystemFont("보고서", TEXT_FONT, 16);
 	reportLabel->setColor(TEXT_COLOR);
 	reportLabel->setPosition(48, 16);
 	reportButton->addChild(reportLabel);
@@ -202,12 +203,15 @@ void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::orderButtonCallback(cocos2d::Ref* sender)
 {
-	addChild(Window::createWithCaption("order"));
+	addChild(Window::createWithCaption("order"));;
 	m_MainMenu->setVisible(false);
 }
 
 void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 {
-	addChild(Window::createWithCaption("report"));
+	
+	MapTab* mapTab = MapTab::create();
+	Window* window = Window::createWithTabs("report", mapTab, nullptr);
+	addChild(window);
 	m_MainMenu->setVisible(false);
 }

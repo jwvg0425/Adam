@@ -10,9 +10,23 @@ public:
 	~Tab();
 
 	virtual bool init();
+	bool initWithCaptionAndIcon
+		(const std::string& caption, const std::string& iconFileName);
+
+	static Tab* createWithCaptionAndIcon
+		(const std::string& caption, const std::string& iconFileName);
+
+	virtual void setContentsVisible(bool visible);
+
+	void setTabId(int tabId);
+	int getTabId();
+	const std::string& getIconName();
 
 	CREATE_FUNC(Tab);
 private:
+	int m_TabId;
+	cocos2d::Label* m_Caption;
+	std::string m_IconName;
 };
 
 #endif

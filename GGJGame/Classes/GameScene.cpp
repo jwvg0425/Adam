@@ -36,7 +36,6 @@ bool GameScene::init()
 
 	m_Black = Sprite::create("black.png");
 	addChild(m_Black);
-	m_Black->setColor(Color3B(255, 255, 255));
 	m_Black->setAnchorPoint(Point(0.5, 0.5));
 	m_Black->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
 

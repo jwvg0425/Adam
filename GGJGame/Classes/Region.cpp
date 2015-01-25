@@ -10,9 +10,9 @@ RegionData::RegionData(const std::string& name, const std::string& spriteName, c
 	m_Area = area;
 	m_IsDeveloped = false;
 	m_IsKnown = false;
-	m_Radioactivity = 1000;
+	m_Radioactivity = 500 + rand() % 1000;
 	m_Wealthy = 0;
-	m_Stablity = 0;
+	m_Stablity = rand() % 100;
 	m_DevelopTurn = 0;
 	m_Distance = 0;
 }

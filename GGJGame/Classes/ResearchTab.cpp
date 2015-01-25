@@ -222,6 +222,12 @@ cocos2d::Color3B ResearchData::getStateColor()
 		return RESEARCH_COMPLETE;
 	}
 
+	//자원이 부족한 경우
+	if (m_NeedResource > GameManager::getInstance()->getResource())
+	{
+		return RESEARCH_INVALID;
+	}
+
 	if (m_Progress > 0)
 	{
 		return RESEARCH_PROGRESS;
@@ -243,13 +249,6 @@ cocos2d::Color3B ResearchData::getStateColor()
 		{
 			return RESEARCH_INVALID;
 		}
-	}
-
-
-	//자원이 부족한 경우
-	if (m_NeedResource > GameManager::getInstance()->getResource())
-	{
-		return RESEARCH_INVALID;
 	}
 
 	return RESEARCH_VALID;

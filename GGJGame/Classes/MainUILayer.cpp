@@ -127,7 +127,13 @@ bool MainUILayer::init()
 	reportLabel->setPosition(48, 16);
 	reportButton->addChild(reportLabel);
 
-	m_MainMenu = Menu::create(labButton, reportButton, nullptr);
+	auto mapButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::mapButtonCallback, this));
+	auto mapLabel = Label::createWithSystemFont("지도", TEXT_FONT, 16);
+	mapLabel->setColor(TEXT_COLOR);
+	mapLabel->setPosition(48, 16);
+	mapButton->addChild(mapLabel);
+
+	m_MainMenu = Menu::create(labButton, reportButton, mapButton, nullptr);
 	m_MainMenu->alignItemsVerticallyWithPadding(4);
 	addChild(m_MainMenu);
 	m_MainMenu->setPosition(Point(53, WND_HEIGHT - 59));
@@ -212,9 +218,8 @@ void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 {
-	MapTab* mapTab = MapTab::create();
 	ReportTab* reportTab = ReportTab::create();
-	Window* window = Window::createWithTabs("report", reportTab, mapTab, nullptr);
+	Window* window = Window::createWithTabs("report", reportTab, nullptr);
 	addChild(window);
 	setUIVisible(false);
 }
@@ -228,4 +233,12 @@ void MainUILayer::setUIVisible(bool visible)
 {
 	m_MainMenu->setVisible(visible);
 	m_NextMonthMenu->setVisible(visible);
+}
+
+void MainUILayer::mapButtonCallback(cocos2d::Ref* sender)
+{
+	MapTab* mapTab = MapTab::create();
+	Window* window = Window::createWithTabs("map", mapTab, nullptr);
+	addChild(window);
+	setUIVisible(false);
 }

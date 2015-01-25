@@ -363,7 +363,7 @@ void GameManager::initResearch()
 		"research\\cure_master.png", 2000, 4000);
 	m_ResearchData[RES_ECO_1] = ResearchData("환경 개선1",
 		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.", 
-		"research\\eco_1.png", 100, 100);
+		"research\\eco_1.png", 40, 100);
 	m_ResearchData[RES_ECO_2] = ResearchData("환경 개선2",
 		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.", 
 		"research\\eco_2.png", 300, 500);
@@ -531,8 +531,7 @@ int GameManager::getTechnique()
 
 void GameManager::simulatePopulation()
 {
-	float populationInc = sqrt(m_Civilization);
-	float populationFactor = 0.0f;
+	float populationInc = pow(m_Civilization, 0.8);
 	int totalTurn = 0;
 
 	for (int i = 0; i < RT_NUM; i++)
@@ -554,9 +553,9 @@ void GameManager::simulatePopulation()
 			{
 				turnRatio = 1;
 			}
-			float stableFactor = 0.1f / m_RegionData[i].m_Stablity;
+			float stableFactor = 0.1f / (m_RegionData[i].m_Stablity + 1);
 			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 10.0f;
-			float wealthFactor = 0.1f / m_RegionData[i].m_Wealthy;
+			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.7);
 
 			populationInc += (wealthFactor - stableFactor - radioactivityFactor)*turnRatio;
 		}
@@ -569,7 +568,7 @@ void GameManager::simulateFood()
 	int foodIncrease = (8 * pow(m_Population, m_FoodExp) + m_Culture*0.001 + m_Civilization*0.01)*m_FoodFactor;
 	int minIncrease = foodIncrease * 0.9;
 	int maxIncrease = foodIncrease * 1.1;
-	int foodUp = minIncrease + rand() % (maxIncrease - minIncrease);
+	int foodUp = minIncrease + rand() % (maxIncrease - minIncrease + 1);
 
 	int foodDecrease = m_Population - m_Civilization*0.01 - m_Culture*0.01;
 
@@ -580,7 +579,7 @@ void GameManager::simulateFood()
 
 	int minDecrease = foodDecrease * 0.9;
 	int maxDecrease = foodDecrease * 1.1;
-	int foodDown = minDecrease + rand() % (maxDecrease - minDecrease);
+	int foodDown = minDecrease + rand() % (maxDecrease - minDecrease + 1);
 
 	m_Food = m_Food + foodUp - foodDown;
 
@@ -635,7 +634,7 @@ void GameManager::simulateResource()
 
 	int minResInc = resourceIncrease * 0.9;
 	int maxResInc = resourceIncrease * 1.1;
-	int resInc = minResInc + rand() % (maxResInc - minResInc);
+	int resInc = minResInc + rand() % (maxResInc - minResInc + 1);
 
 	m_Resource += resInc;
 }
@@ -660,7 +659,8 @@ void GameManager::simulateCulture()
 	cultureInc *= m_CultureFactor;
 	int minCulInc = cultureInc * 0.9f;
 	int maxCulInc = cultureInc * 1.1f;
-	int culInc = minCulInc + rand() % (maxCulInc - minCulInc);
+	int culInc = minCulInc + rand() % (maxCulInc - minCulInc + 1);
+
 
 	m_Culture += culInc;
 }
@@ -710,7 +710,7 @@ void GameManager::simulateTechnique()
 	int technique = m_Technique + m_Civilization * 0.01;
 	int minTechnique = technique * 0.9;
 	int maxTechnique = technique * 1.1;
-	int nowTechnique = minTechnique + rand() % (maxTechnique - minTechnique);
+	int nowTechnique = minTechnique + rand() % (maxTechnique - minTechnique + 1);
 
 	if (m_Research != RES_NONE)
 	{
@@ -772,6 +772,15 @@ void GameManager::simulateRegion()
 				foodDesc = 0;
 			}
 
+			if (populationDesc > m_Population)
+				populationDesc = m_Population;
+
+			if (foodDesc > m_Food)
+				foodDesc = m_Food;
+
+			if (resourceDesc > m_Resource)
+				resourceDesc = m_Resource;
+
 			m_Population -= populationDesc;
 			m_Food -= foodDesc;
 			m_Resource -= resourceDesc;
@@ -783,6 +792,88 @@ void GameManager::simulateRegion()
 
 			ReportData report("탐사 실패", content, m_Year, m_Month);
 			addReport(report);
+		}
+	}
+
+	//개척은 해당 지역의 방사능에 큰 영향을 받는다. 거리 멀어지면 성공률 떨어지는 건 똑같음.
+	if (m_DevelopRegion != RT_NONE)
+	{
+		int distance = m_RegionData[m_DevelopRegion].getDistance();
+		float success = 0.8f;
+		int radioactivity = m_RegionData[m_DevelopRegion].m_Radioactivity;
+
+		if (radioactivity > 1000)
+		{
+			success -= 0.3f;
+		}
+		else if (radioactivity > 500)
+		{
+			success -= 0.2f;
+		}
+		else if (radioactivity > 300)
+		{
+			success -= 0.1f;
+		}
+
+		success /= distance;
+
+		int rate = success * 1000;
+
+		//성공
+		if (rand() % 1000 < rate)
+		{
+			m_RegionData[m_DevelopRegion].m_IsDeveloped = true;
+
+			std::string content = m_RegionData[m_DevelopRegion].m_Name + "지역의 개척에 성공했습니다. 인류의 활동 반경이 점점 넓어지고 있군요. 좋은 추세입니다.";
+
+			ReportData report("개척 성공", content, m_Year, m_Month);
+
+			addReport(report);
+		}
+		else
+		{
+			//실패한 경우 거리에 비례해서 더 많은 손실을 입음. 자기가 가진 재산 현황에 비례해서 타격을 입는다.
+			int populationDesc = 30 + m_Population * 0.2f * distance;
+			int foodDesc = 50 + m_Food * 0.2f * distance;
+			int resourceDesc = 20 + m_Resource*0.2f * distance;
+
+			m_Population -= populationDesc;
+			m_Food -= foodDesc;
+			m_Resource -= resourceDesc;
+
+			char content[255];
+			sprintf(content, "%s 지역의 개척에 실패했습니다... 그 과정에서 %d명의 사람이 죽었고,"
+				"%d만큼의 식량이 손실됐으며, %d만큼의 자원도 잃었습니다. 정말 크나큰 손실을 입었네요..", m_RegionData[m_SurveyRegion].m_Name.c_str(),
+				populationDesc, foodDesc, resourceDesc);
+
+			ReportData report("개척 실패", content, m_Year, m_Month);
+			addReport(report);
+		}
+	}
+
+	//각 지역의 환경 수치 및 부유함 계산
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		auto& data = m_RegionData[i];
+
+		//매년 몇 정도씩은 꾸준히 감소함.
+		if (data.m_Radioactivity>100)
+		{
+			data.m_Radioactivity -= rand() % 3;
+			data.m_Radioactivity -= m_EcoFactor / 3;
+		}
+
+		//안정성도 어느정도씩은 기본적으로 꾸준히 증가.
+		data.m_Stablity += rand() % 3;
+		data.m_Stablity += m_EcoFactor / 4;
+
+		if (data.m_IsDeveloped)
+		{
+			data.m_Radioactivity -= m_Population * 0.01 + m_Civilization * 0.01;
+			if (data.m_Radioactivity < 0)
+				data.m_Radioactivity = 0;
+
+			data.m_Wealthy += (m_Population * 0.01 + m_Civilization * 0.01) * sqrt(m_Turn - data.m_DevelopTurn);
 		}
 	}
 }

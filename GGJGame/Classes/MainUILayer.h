@@ -16,6 +16,7 @@ public:
 
 	void labButtonCallback(cocos2d::Ref* sender);
 	void reportButtonCallback(cocos2d::Ref* sender);
+	void mapButtonCallback(cocos2d::Ref* sender);
 	void nextMonthButtonCallback(cocos2d::Ref* sender);
 
 	void setUIVisible(bool visible);

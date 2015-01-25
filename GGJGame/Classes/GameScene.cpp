@@ -45,7 +45,6 @@ bool GameScene::init()
 	m_MainUILayer = MainUILayer::create();
 	addChild(m_MainUILayer);
 	m_MainUILayer->setVisible(false);
-	m_FirstTurn = true;
 
 	scheduleUpdate();
 	
@@ -71,13 +70,6 @@ void GameScene::startTurn(cocos2d::Node* sender)
 {
 	setMainUIVisible(true);
 	m_Black->removeFromParent();
-
-	if (!m_FirstTurn)
-	{
-		GameManager::getInstance()->turnStart(this);
-	}
-
-	m_FirstTurn = false;
 }
 
 void GameScene::turnEndAction()
@@ -102,6 +94,8 @@ void GameScene::turnEndAction()
 
 void GameScene::turnChat()
 {
+	GameManager::getInstance()->turnStart(this);
+
 	std::vector<std::string> chatList =
 	{
 		"아담, 깨어날 시간입니다.",
@@ -111,11 +105,34 @@ void GameScene::turnChat()
 		"아담, 우리는 언제쯤 예전과 같은 생활로 돌아갈 수 있을까요?"
 	};
 
-	std::vector <std::string> chat;
+	if (GameManager::getInstance()->isGameOver())
+	{
+		char date[255];
 
-	chat.push_back(chatList[rand() % chatList.size()]);
+		sprintf(date, "인류 문명, %d년 %월에 막을 내리다.", GameManager::getInstance()->getYear(), GameManager::getInstance()->getMonth());
+		std::vector<std::string> chat =
+		{
+			"슈퍼 컴퓨터 아담의 말만 믿고 따라온 인류 문명은",
+			"아담이 너무 멍청했던 바람에 결국 멸망하고 말았다.",
+			date
+		};
 
-	ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::turnStartAction, this));
+		ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::gameOver, this));
+		addChild(chatWindow);
+	}
+	else
+	{
+		std::vector <std::string> chat;
 
-	addChild(chatWindow);
+		chat.push_back(chatList[rand() % chatList.size()]);
+
+		ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::turnStartAction, this));
+
+		addChild(chatWindow);
+	}
+}
+
+void GameScene::gameOver()
+{
+	Director::getInstance()->end();
 }

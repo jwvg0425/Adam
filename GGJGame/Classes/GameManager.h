@@ -40,6 +40,7 @@ public:
 	RegionType							getSurveyRegion();
 	RegionType							getDevelopRegion();
 	void								initRegionDistance();
+	bool								isGameOver();
 
 private:
 	GameManager();
@@ -93,6 +94,8 @@ private:
 	float m_FoodExp;
 	float m_CivilInc;
 	float m_CultureFactor;
+
+	bool m_IsGameOver;
 };
 
 #endif

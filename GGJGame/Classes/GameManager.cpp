@@ -41,10 +41,11 @@ GameManager::GameManager()
 	m_DevelopRegion = RT_NONE;
 	m_Technique = 30;
 	m_FoodFactor = 1.0f;
-	m_FoodExp = 0.5f;
+	m_FoodExp = 0.4f;
 	m_CivilInc = 1;
 	m_CultureFactor = 1.0f;
 	m_EcoFactor = 0;
+	m_IsGameOver = false;
 
 	initRegion();
 	initResearch();
@@ -140,6 +141,11 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 
 		//이전 달까지의 상황을 바탕으로 시뮬레이트.
 		simulate();
+
+		if (m_Population <= 0)
+		{
+			m_IsGameOver = true;
+		}
 
 		//정기 보고서 추가
 		addRegularReport();
@@ -322,20 +328,20 @@ void GameManager::initResearch()
 		"research\\upgrade_1.png", 30, 50);
 	m_ResearchData[RES_UPGRADE_2] = ResearchData("성능 향상2",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_2.png", 60, 100);
+		"research\\upgrade_2.png", 100, 100);
 	m_ResearchData[RES_UPGRADE_3] = ResearchData("성능 향상3",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_3.png", 120, 200);
+		"research\\upgrade_3.png", 200, 200);
 	m_ResearchData[RES_UPGRADE_4] = ResearchData("성능 향상4",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_4.png", 240, 400);
+		"research\\upgrade_4.png", 350, 400);
 	m_ResearchData[RES_UPGRADE_5] = ResearchData("성능 향상5",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_5.png", 480, 800);
+		"research\\upgrade_5.png", 600, 800);
 	m_ResearchData[RES_CIVIL_1] = ResearchData("문명화1",
 		"인류의 문명 수준을 향상시킵니다.", "research\\civil_1.png", 100, 100);
 	m_ResearchData[RES_CIVIL_2] = ResearchData("문명화2",
-		"인류의 문명 수준을 향상시킵니다.", "research\\civil_2.png", 200, 200);
+		"인류의 문명 수준을 향상시킵니다.", "research\\civil_2.png", 400, 400);
 	m_ResearchData[RES_CULTURE_1] = ResearchData("문화화1",
 		"인류의 문화 수준을 향상시킵니다.", "research\\culture_1.png", 200, 300);
 	m_ResearchData[RES_CULTURE_2] = ResearchData("문화화2",
@@ -343,9 +349,9 @@ void GameManager::initResearch()
 	m_ResearchData[RES_FOOD_1] = ResearchData("식량 연구1",
 		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_1.png", 50, 50);
 	m_ResearchData[RES_FOOD_2] = ResearchData("식량 연구2",
-		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_2.png", 100, 150);
+		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_2.png", 200, 300);
 	m_ResearchData[RES_FOOD_3] = ResearchData("식량 연구3",
-		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_3.png", 200, 450);
+		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_3.png", 500, 600);
 	m_ResearchData[RES_SPEED_1] = ResearchData("연산 향상1",
 		"컴퓨터의 연산 속도를 극도로 향상시켜 전체 연구 속도를 획기적으로 단축시킵니다.",
 		"research\\speed_1.png", 1000, 1000);
@@ -453,6 +459,7 @@ void GameManager::simulate()
 	simulatePopulation();
 	simulateRegion();
 	simulateTechnique();
+	simulateEvent();
 
 	//초기화 작업
 	m_Research = RES_NONE;
@@ -553,19 +560,22 @@ void GameManager::simulatePopulation()
 			{
 				turnRatio = 1;
 			}
-			float stableFactor = 0.1f / (m_RegionData[i].m_Stablity + 1);
-			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 10.0f;
-			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.7);
+			float stableFactor = 100.0f / (m_RegionData[i].m_Stablity + 1);
+			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 7.0f;
+			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.4);
 
 			populationInc += (wealthFactor - stableFactor - radioactivityFactor)*turnRatio;
 		}
 	}
 	m_Population += populationInc;
+
+	if (m_Population < 0)
+		m_Population = 0;
 }
 
 void GameManager::simulateFood()
 {
-	int foodIncrease = (8 * pow(m_Population, m_FoodExp) + m_Culture*0.001 + m_Civilization*0.01)*m_FoodFactor;
+	int foodIncrease = (16 * pow(m_Population, m_FoodExp) + m_Culture*0.001 + m_Civilization*0.01)*m_FoodFactor;
 	int minIncrease = foodIncrease * 0.9;
 	int maxIncrease = foodIncrease * 1.1;
 	int foodUp = minIncrease + rand() % (maxIncrease - minIncrease + 1);
@@ -716,6 +726,8 @@ void GameManager::simulateTechnique()
 	{
 		m_ResearchData[m_Research].m_Progress += nowTechnique;
 		m_Resource -= m_ResearchData[m_Research].m_NeedResource;
+		if (m_Resource <= 0)
+			m_Resource = 0;
 
 		if (m_ResearchData[m_Research].m_Progress >= m_ResearchData[m_Research].m_NeedPeriod)
 		{
@@ -837,6 +849,15 @@ void GameManager::simulateRegion()
 			int foodDesc = 50 + m_Food * 0.2f * distance;
 			int resourceDesc = 20 + m_Resource*0.2f * distance;
 
+			if (populationDesc > m_Population)
+				populationDesc = m_Population;
+
+			if (foodDesc > m_Food)
+				foodDesc = m_Food;
+
+			if (resourceDesc > m_Resource)
+				resourceDesc = m_Resource;
+
 			m_Population -= populationDesc;
 			m_Food -= foodDesc;
 			m_Resource -= resourceDesc;
@@ -880,7 +901,188 @@ void GameManager::simulateRegion()
 
 void GameManager::simulateEvent()
 {
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		auto& data = m_RegionData[i];
 
+		if (data.m_IsDeveloped)
+		{
+			if (data.m_Radioactivity > 1000)
+			{
+				//50%확률로 방사능으로 인한 인구 감소 현상 발생
+				if (rand() % 100 < 50)
+				{
+					int desc = (data.m_Radioactivity / 10) + rand() % (data.m_Radioactivity / 100 + 1);
+					m_Population -= desc;
+					char content[255];
+
+					sprintf(content, "%s 지역에서 방사능으로 인해 심각한 피해가 발생하고 있습니다."
+						"방사능 질환으로 인해 이번 달에만 %d명의 사상자가 발생했으며,"
+						"조속히 조치를 취하지 않는 한 앞으로도 피해는 증가할 것으로 보입니다.",
+						data.m_Name.c_str(), desc);
+
+					ReportData report("방사능 피해 발생", content, m_Year, m_Month);
+					addReport(report);
+				}
+			}
+
+			//기후가 불안정할 경우 여러가지 현상 발생
+			if (data.m_Stablity < 200)
+			{
+				//20% 확률로 태풍, 10% 확률로 폭우 및 홍수, 10% 확률로 극심한 가뭄
+				int prob = rand() % 100;
+				int popl;
+				int food;
+				int resc;
+				std::string dis;
+
+				if (prob < 20)
+				{
+					dis = "갑자기 불어닥친 태풍";
+					popl = 40 + rand() % 20;
+					food = 80 + rand() % 40;
+					resc = 30 + rand() % 20;
+				}
+				else if (prob < 30)
+				{
+					dis = "급작스런 폭우 및 그로 인한 홍수";
+					popl = 10 + rand() % 10;
+					food = 110 + rand() % 60;
+					resc = 40 + rand() % 30;
+				}
+				else if (prob < 40)
+				{
+					dis = "한 달간 비 한 방울 내리지 않은 극심한 가뭄";
+					popl = 30 + rand() % 20;
+					food = 10 + rand() % 10;
+					resc = 10 + rand() % 10;
+				}
+
+				if (prob< 40)
+				{
+
+					if (popl>m_Population)
+						popl = m_Population;
+
+					if (food > m_Food)
+						food = m_Food;
+
+					if (resc > m_Resource)
+						resc = m_Resource;
+
+					m_Population -= popl;
+					m_Food -= food;
+					m_Resource -= resc;
+
+					char content[255];
+
+					sprintf(content, "%s 지역에서 %s로 인해 심각한 피해가 발생했습니다.\n"
+						"이 재난 때문에 %d 명의 사상자가 발생했으며, %d만큼의 식량과 %d만큼의 자원도 손실한 것으로 확인됩니다.",
+						data.m_Name.c_str(), dis.c_str(), popl, food, resc);
+
+					ReportData report("재난 발생", content, m_Year, m_Month);
+
+					addReport(report);
+				}
+			}
+
+			//질병 발생. 질병은 턴 수가 좀 높아지면 발생함.
+
+			if (m_Turn > 30 && !m_ResearchData[RES_CURE_1].m_IsCompleted)
+			{
+				int prob = rand() % 100;
+				int popl;
+
+				//10%확률로 질병 발생.
+				if (prob < 10)
+				{
+					popl = 50 + m_Population * 0.1;
+
+					if (popl>m_Population)
+						popl = m_Population;
+
+					char content[255];
+
+					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
+						"이 질병으로 인해 %명의 사상자가 발생했습니다.", data.m_Name.c_str(), popl);
+
+					ReportData report("질병 발생", content, m_Year, m_Month);
+					addReport(report);
+				}
+			}
+
+			if (m_Turn > 50 && !m_ResearchData[RES_CURE_2].m_IsCompleted)
+			{
+				int prob = rand() % 100;
+				int popl;
+
+				//15%확률로 질병 발생.
+				if (prob < 15)
+				{
+					popl = 80 + m_Population * 0.15;
+
+					if (popl>m_Population)
+						popl = m_Population;
+
+					char content[255];
+
+					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
+						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 살상력이 높아 굉장히 위험하기 때문에 빠른 대처가 필요할 것으로 보입니다.", data.m_Name.c_str(), popl);
+
+					ReportData report("질병 발생", content, m_Year, m_Month);
+					addReport(report);
+				}
+			}
+
+			if (m_Turn > 80 && !m_ResearchData[RES_CURE_3].m_IsCompleted)
+			{
+				int prob = rand() % 100;
+				int popl;
+
+				//20%확률로 질병 발생.
+				if (prob < 20)
+				{
+					popl = 130 + m_Population * 0.2;
+
+					if (popl>m_Population)
+						popl = m_Population;
+
+					char content[255];
+
+					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
+						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 살상력이 높고, 또 전염력도 굉장히 높은 것으로 보입니다."
+						"빨리 대처하지 않으면 모든 인류가 이 질병으로 인해 멸망할지도 모릅니다.", data.m_Name.c_str(), popl);
+
+					ReportData report("질병 발생", content, m_Year, m_Month);
+					addReport(report);
+				}
+			}
+
+			if (m_Turn > 110 && !m_ResearchData[RES_CURE_MASTER].m_IsCompleted)
+			{
+				int prob = rand() % 100;
+				int popl;
+
+				//25%확률로 질병 발생.
+				if (prob < 25)
+				{
+					popl = 200 + m_Population * 0.25;
+
+					if (popl>m_Population)
+						popl = m_Population;
+
+					char content[255];
+
+					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
+						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 여태껏 관찰된 모든 병균을 훨씬 뛰어넘는 극악의 살상력과 전염성을 갖고 있습니다."
+						"빠른 대처가 필요합니다.", data.m_Name.c_str(), popl);
+
+					ReportData report("질병 발생", content, m_Year, m_Month);
+					addReport(report);
+				}
+			}
+		}
+	}
 }
 
 void GameManager::setSurveyRegion(RegionType type)
@@ -909,4 +1111,9 @@ void GameManager::initRegionDistance()
 	{
 		m_RegionData[i].m_Distance = -1;
 	}
+}
+
+bool GameManager::isGameOver()
+{
+	return m_IsGameOver;
 }

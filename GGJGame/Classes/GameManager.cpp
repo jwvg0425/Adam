@@ -90,21 +90,13 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 			"아담, 당신이 우리의 마지막 희망입니다."
 		};
 
-		runningLayer->addChild(ChatWindow::createWithCallback(firstChat, CC_CALLBACK_0(GameManager::gameStart, this),6.0f));
+		runningLayer->addChild(ChatWindow::createWithCallback(firstChat, CC_CALLBACK_0(GameScene::gameStartAction, static_cast<GameScene*>(runningLayer)),6.0f));
 	}
 }
 
 void GameManager::turnEnd()
 {
 
-}
-
-void GameManager::gameStart()
-{
-	auto scene = Director::getInstance()->getRunningScene();
-	auto layer = static_cast<GameScene*>(scene->getChildByTag(SCENE_LAYER_TAG));
-
-	layer->setMainUIVisible(true);
 }
 
 void GameManager::setChatting(bool chat)

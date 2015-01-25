@@ -36,6 +36,7 @@ bool GameScene::init()
 
 	m_Black = Sprite::create("black.png");
 	addChild(m_Black);
+	m_Black->setColor(Color3B(255, 255, 255));
 	m_Black->setAnchorPoint(Point(0.5, 0.5));
 	m_Black->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
 
@@ -53,4 +54,21 @@ bool GameScene::init()
 void GameScene::setMainUIVisible(bool visible)
 {
 	m_MainUILayer->setVisible(visible);
+}
+
+void GameScene::gameStartAction()
+{
+	auto firstDelay = DelayTime::create(1);
+	auto blackFade = FadeOut::create(4);
+	auto delay = DelayTime::create(1);
+	auto callback = CallFuncN::create(CC_CALLBACK_1(GameScene::startGame, this));
+	auto action = Sequence::create(firstDelay, blackFade, delay, callback,nullptr);
+
+	m_Black->runAction(action);
+}
+
+void GameScene::startGame(cocos2d::Node* sender)
+{
+	setMainUIVisible(true);
+	m_Black->removeFromParent();
 }

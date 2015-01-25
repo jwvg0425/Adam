@@ -20,7 +20,6 @@ public:
 	int						getMonth();
 	void					turnStart(cocos2d::Layer* runningLayer);
 	void					turnEnd();
-	void					gameStart();
 	void					setChatting(bool chat);
 	bool					isChatting();
 private:

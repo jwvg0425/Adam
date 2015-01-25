@@ -19,6 +19,8 @@ public:
     CREATE_FUNC(GameScene);
 
 	void setMainUIVisible(bool visible);
+	void gameStartAction();
+	void startGame(cocos2d::Node* sender);
 
 private:
 	cocos2d::Sprite* m_Black;

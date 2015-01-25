@@ -36,6 +36,8 @@ GameManager::GameManager()
 	m_Year = 4000;
 	m_Month = 1;
 	m_Turn = 0;
+
+	initRegion();
 }
 
 GameManager::~GameManager()
@@ -109,4 +111,34 @@ void GameManager::setChatting(bool chat)
 bool GameManager::isChatting()
 {
 	return m_IsChatting;
+}
+
+void GameManager::initRegion()
+{
+	m_RegionData[RT_ALASKA_CANADA] = RegionData("알래스카 / 캐나다", "map\\alaska_canada.png", Rect(276, 24, 154, 76));
+	m_RegionData[RT_ARGENTINA_CHILE] = RegionData("아르헨티나 / 칠레", "map\\argentina_chile.png", Rect(399, 242, 40, 71));
+	m_RegionData[RT_BRAZIL] = RegionData("브라질", "map\\brazil.png", Rect(412, 192, 50, 76));
+	m_RegionData[RT_CARIBBEAN] = RegionData("카리브", "map\\caribbean.png", Rect(391, 183, 39, 65));
+	m_RegionData[RT_CENTRAL_AFRICA] = RegionData("중앙 아프리카", "map\\central_africa.png", Rect(34, 161, 39, 53));
+	m_RegionData[RT_CENTRAL_AMERICA] = RegionData("중앙 아메리카", "map\\central_america.png", Rect(321, 88, 118, 82));
+	m_RegionData[RT_CHINA] = RegionData("중국", "map\\china.png", Rect(137, 94, 68, 51));
+	m_RegionData[RT_EAST_AFRICA] = RegionData("동 아프리카", "map\\east_africa.png", Rect(69, 165, 36, 51));
+	m_RegionData[RT_EUROPE] = RegionData("유럽", "map\\europe.png", Rect(19, 46, 50, 76));
+	m_RegionData[RT_GREENLAND] = RegionData("그린란드", "map\\greenland.png", Rect(411, 20, 70, 55));
+	m_RegionData[RT_INDO] = RegionData("인도", "map\\indo.png", Rect(111, 125, 48, 45));
+	m_RegionData[RT_JAPAN] = RegionData("일본 열도", "map\\japan.png", Rect(223, 101, 26, 27));
+	m_RegionData[RT_KOREA] = RegionData("한국", "map\\korea.png", Rect(209, 115, 10, 10));
+	m_RegionData[RT_MEXICO] = RegionData("멕시코", "map\\mexico.png", Rect(349, 154, 62, 41));
+	m_RegionData[RT_NORTH_AFRICA] = RegionData("북 아프리카", "map\\north_africa.png", Rect(16, 126, 59, 40));
+	m_RegionData[RT_NORTH_ASIA] = RegionData("북 아시아", "map\\north_asia.png", Rect(66, 47, 202, 50));
+	m_RegionData[RT_OCEANIA] = RegionData("오세아니아", "map\\oceania.png", Rect(177, 193, 91, 66));
+	m_RegionData[RT_SOUTH_AFRICA] = RegionData("남 아프리카", "map\\south_africa.png", Rect(39, 212, 68, 50));
+	m_RegionData[RT_SOUTH_EAST_ASIA] = RegionData("동남 아시아", "map\\south_east_asia.png", Rect(155, 141, 80, 65));
+	m_RegionData[RT_SOUTH_WEST_ASIA] = RegionData("서남 아시아", "map\\south_west_asia.png", Rect(64, 114, 51, 45));
+	m_RegionData[RT_WEST_AFRICA] = RegionData("서 아프리카", "map\\west_africa.png", Rect(3, 126, 52, 70));
+}
+
+const RegionData& GameManager::getRegionData(RegionType type)
+{
+	return m_RegionData[type];
 }

@@ -209,7 +209,6 @@ void MainUILayer::orderButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 {
-	
 	MapTab* mapTab = MapTab::create();
 	Window* window = Window::createWithTabs("report", mapTab, nullptr);
 	addChild(window);

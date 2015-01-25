@@ -54,14 +54,14 @@ bool Window::init()
 	m_CaptionLabel = Label::createWithSystemFont("", TEXT_FONT, 14);
 	addChild(m_CaptionLabel);
 	m_CaptionLabel->setAnchorPoint(Point(0, 1));
-	m_CaptionLabel->setPosition(Point(105, 414));
+	m_CaptionLabel->setPosition(Point(105, 430));
 	m_CaptionLabel->setColor(TEXT_COLOR);
 
 	auto exitButton = MenuItemImage::create("exitButton.png", "exitButton.png", CC_CALLBACK_1(Window::exitButtonCallback, this));
 	auto menu = Menu::create(exitButton, nullptr);
 
 	menu->alignItemsVertically();
-	menu->setPosition(Point(580, 406));
+	menu->setPosition(Point(580, 422));
 
 	addChild(menu);
 

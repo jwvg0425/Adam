@@ -26,7 +26,7 @@ bool Tab::init()
 	addChild(m_Caption);
 	m_Caption->setVisible(false);
 	m_Caption->setAnchorPoint(Point(0, 1));
-	m_Caption->setPosition(Point(96, 393));
+	m_Caption->setPosition(Point(96, 409));
 	m_Caption->setColor(TEXT_COLOR);
 
 	return true;
@@ -42,7 +42,7 @@ bool Tab::initWithCaptionAndIcon(const std::string& caption, const std::string& 
 	addChild(m_Caption);
 	m_Caption->setVisible(false);
 	m_Caption->setAnchorPoint(Point(0, 1));
-	m_Caption->setPosition(Point(96, 393));
+	m_Caption->setPosition(Point(96, 409));
 	m_Caption->setColor(TEXT_COLOR);
 
 	m_IconName = iconFileName;

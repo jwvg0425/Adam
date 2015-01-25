@@ -3,6 +3,7 @@
 #define _GAME_MANAGER_H_
 
 #include "cocos2d.h"
+#include "Region.h"
 
 
 class GameManager
@@ -22,9 +23,12 @@ public:
 	void					turnEnd();
 	void					setChatting(bool chat);
 	bool					isChatting();
+	const RegionData&		getRegionData(RegionType type);
 private:
 	GameManager();
 	~GameManager();
+
+	void					initRegion();
 
 	static GameManager* m_Instance;
 
@@ -39,6 +43,8 @@ private:
 
 	//몇 번째 차례인지. 겉으로 보이긴 year / month 가 기준이지만 실제로는 이 turn을 바탕으로 시뮬레이션 수행.
 	int m_Turn;
+
+	RegionData m_RegionData[RT_NUM];
 };
 
 #endif

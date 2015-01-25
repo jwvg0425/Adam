@@ -4,26 +4,29 @@
 
 #include "cocos2d.h"
 #include "Region.h"
-
+#include "ReportTab.h"
 
 class GameManager
 {
 public:
-	static GameManager*		getInstance();
-	static void				releaseInstance();
+	static GameManager*					getInstance();
+	static void							releaseInstance();
 
-	int						getPopulation();
-	int						getFood();
-	int						getResource();
-	int						getCulture();
-	int						getCivilization();
-	int						getYear();
-	int						getMonth();
-	void					turnStart(cocos2d::Layer* runningLayer);
-	void					turnEnd(cocos2d::Layer* runningLayer);
-	void					setChatting(bool chat);
-	bool					isChatting();
-	const RegionData&		getRegionData(RegionType type);
+	int									getPopulation();
+	int									getFood();
+	int									getResource();
+	int									getCulture();
+	int									getCivilization();
+	int									getYear();
+	int									getMonth();
+	void								turnStart(cocos2d::Layer* runningLayer);
+	void								turnEnd(cocos2d::Layer* runningLayer);
+	void								setChatting(bool chat);
+	bool								isChatting();
+	const RegionData&					getRegionData(RegionType type);
+	const std::deque<ReportData>&		getReportData();
+	const ReportData&					getReport(int idx);
+	void								addReport(const ReportData& data);
 private:
 	GameManager();
 	~GameManager();
@@ -45,6 +48,7 @@ private:
 	int m_Turn;
 
 	RegionData m_RegionData[RT_NUM];
+	std::deque<ReportData> m_ReportData;
 };
 
 #endif

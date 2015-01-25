@@ -120,19 +120,13 @@ bool MainUILayer::init()
 	labLabel->setPosition(48, 16);
 	labButton->addChild(labLabel);
 
-	auto orderButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::orderButtonCallback, this));
-	auto orderLabel = Label::createWithSystemFont("명령", TEXT_FONT, 16);
-	orderLabel->setColor(TEXT_COLOR);
-	orderLabel->setPosition(48, 16);
-	orderButton->addChild(orderLabel);
-
 	auto reportButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::reportButtonCallback, this));
 	auto reportLabel = Label::createWithSystemFont("보고서", TEXT_FONT, 16);
 	reportLabel->setColor(TEXT_COLOR);
 	reportLabel->setPosition(48, 16);
 	reportButton->addChild(reportLabel);
 
-	m_MainMenu = Menu::create(labButton, orderButton, reportButton, nullptr);
+	m_MainMenu = Menu::create(labButton, reportButton, nullptr);
 	m_MainMenu->alignItemsVerticallyWithPadding(4);
 	addChild(m_MainMenu);
 	m_MainMenu->setPosition(Point(53, WND_HEIGHT - 59));
@@ -210,12 +204,6 @@ void MainUILayer::update(float dTime)
 void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 {
 	addChild(Window::createWithCaption("research"));
-	setUIVisible(false);
-}
-
-void MainUILayer::orderButtonCallback(cocos2d::Ref* sender)
-{
-	addChild(Window::createWithCaption("order"));;
 	setUIVisible(false);
 }
 

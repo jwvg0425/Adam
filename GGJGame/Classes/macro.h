@@ -6,7 +6,7 @@
 #define WND_WIDTH 640
 #define WND_HEIGHT 480
 #define TEXT_COLOR (cocos2d::Color3B(191, 228, 230))
-#define TEXT_FONT ("NanumBarunGothicBold")
+#define TEXT_FONT ("나눔고딕")
 #define REGION_DEVELOP (cocos2d::Color3B(172,211,115))
 #define REGION_UNKNOWN (cocos2d::Color3B(0,0,0))
 #define REGION_DANGER (cocos2d::Color3B(255,64,64))

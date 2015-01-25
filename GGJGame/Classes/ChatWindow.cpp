@@ -33,10 +33,10 @@ bool ChatWindow::init()
 	addChild(m_WindowSprite, 0);
 	m_WindowSprite->setPosition(Point(WND_WIDTH / 2, 100));
 
-	m_ChatLabel = Label::createWithSystemFont("", TEXT_FONT, 16, Size(480, 140));
-	addChild(m_ChatLabel, 1);
+	m_ChatLabel = Label::createWithSystemFont("", TEXT_FONT, 20, Size(480, 100));
+	addChild(m_ChatLabel);
 	m_ChatLabel->setColor(TEXT_COLOR);
-	m_ChatLabel->setPosition(Point(WND_WIDTH / 2, 100));
+	m_ChatLabel->setPosition(Point(WND_WIDTH / 2, 90));
 
 	m_NextIcon = Sprite::create("next_icon.png");
 	addChild(m_NextIcon, 2);

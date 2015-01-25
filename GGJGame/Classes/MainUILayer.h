@@ -15,7 +15,6 @@ public:
 	virtual void update(float dTime);
 
 	void labButtonCallback(cocos2d::Ref* sender);
-	void orderButtonCallback(cocos2d::Ref* sender);
 	void reportButtonCallback(cocos2d::Ref* sender);
 	void nextMonthButtonCallback(cocos2d::Ref* sender);
 

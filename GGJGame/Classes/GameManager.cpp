@@ -30,7 +30,7 @@ GameManager::GameManager()
 {
 	m_Civilization = 0;
 	m_Culture = 0;
-	m_Population = 5;
+	m_Population = 507;
 	m_Food = 3;
 	m_Resource = 5;
 	m_Year = 4000;
@@ -91,6 +91,22 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 			"모든 게 무너졌습니다. 인류가 그 동안 쌓아올렸던 모든 것들이, 먼지처럼 사라져버렸습니다.",
 			"아담, 당신이 우리의 마지막 희망입니다."
 		};
+
+		ReportData firstReport("인류 멸망의 위기", "사태가 심각합니다."
+			"30년에 걸친 핵전쟁 끝에 지구 상에 존재하던 모든 국가는 멸망하고 말았습니다."
+			"방사능으로 인해 인류가 발을 딛고 서 있을 수 있는 땅도 이젠 한 줌 밖에 남지 않았습니다. "
+			"슈퍼 컴퓨터 아담, 이제 인류의 마지막 희망은 당신 뿐입니다."
+			"이 절망적인 상황 속에서, 인류가 살아남기 위해선 어떻게 해야합니까?", 4000, 1);
+
+		ReportData secondReport("마지막 남은 땅, 한반도", "현재 생존하는 것으로 확인된 인류는 500명 정도입니다."
+			"현재 인류는 그나마 인간이 살 수 있는 환경을 갖춘 유일한 땅 한반도에 모두 모여 힘겹게 살아가고 있는 상황입니다.", 4000, 1);
+
+		ReportData thirdReport("식량 부족 문제 심각", "모든 땅이 오염되어 더 이상 식량을 공급할 수단이 없습니다."
+			"지금 추세대로라면 몇 개월 내로 모든 인류는 굶어죽게 될 것입니다.", 4000, 1);
+
+		addReport(firstReport);
+		addReport(secondReport);
+		addReport(thirdReport);
 
 		runningLayer->addChild(
 			ChatWindow::createWithCallback(firstChat, 
@@ -158,4 +174,26 @@ void GameManager::initRegion()
 const RegionData& GameManager::getRegionData(RegionType type)
 {
 	return m_RegionData[type];
+}
+
+const std::deque<ReportData>& GameManager::getReportData()
+{
+	return m_ReportData;
+}
+
+void GameManager::addReport(const ReportData& data)
+{
+	m_ReportData.push_front(data);
+}
+
+const ReportData& GameManager::getReport(int idx)
+{
+	if (idx >= 0 && idx < m_ReportData.size())
+	{
+		return m_ReportData[idx];
+	}
+	else
+	{
+		return *(new ReportData());
+	}
 }

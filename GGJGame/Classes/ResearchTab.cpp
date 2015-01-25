@@ -118,6 +118,7 @@ bool ResearchTab::init()
 
 void ResearchTab::researchIconCallback(Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	auto item = static_cast<MenuItem*>(sender);
 	int tag = item->getTag();
 	auto data = GameManager::getInstance()->getResearchData(static_cast<ResearchType>(tag));
@@ -176,6 +177,7 @@ void ResearchTab::update(float dTime)
 
 void ResearchTab::confirmResearchCallback(Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	auto data = GameManager::getInstance()->getResearchData(m_Selected);
 	char confirmStr[255] = { 0, };
 

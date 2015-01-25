@@ -91,6 +91,10 @@ void ChatWindow::update(float dTime)
 	//더 출력될 글자가 생기면 라벨 갱신.
 	if (prevIndex != m_OutputIndex)
 	{
+		if (m_Chats[m_ChatPage][m_OutputIndex] != ' ')
+		{
+			CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("typing.wav");
+		}
 		std::string outputStr(&m_Chats[m_ChatPage][0], &m_Chats[m_ChatPage][m_OutputIndex]);
 
 		m_ChatLabel->setString(outputStr);

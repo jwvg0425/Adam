@@ -32,8 +32,6 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // create a scene. it's an autorelease object
     auto scene = GameScene::createScene();
 
-	srand((unsigned)time(nullptr));
-
     // run
     director->runWithScene(scene);
 

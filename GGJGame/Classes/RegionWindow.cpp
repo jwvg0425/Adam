@@ -59,6 +59,7 @@ bool RegionWindow::init()
 
 void RegionWindow::updateInfo(RegionType type)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	auto data = GameManager::getInstance()->getRegionData(type);
 	float x = MAP_ORIGIN_X + data.m_Area.getMidX();
 	float y = MAP_ORIGIN_Y - data.m_Area.getMidY();
@@ -94,7 +95,7 @@ void RegionWindow::updateInfo(RegionType type)
 	{
 		anchorY = 1.0f;
 		nameY = -30;
-		descY = -70;
+		descY = -50;
 		stateY = -120;
 		buttonY = -166;
 	}
@@ -102,7 +103,7 @@ void RegionWindow::updateInfo(RegionType type)
 	{
 		anchorY = 0.0f;
 		nameY = 162;
-		descY = 122;
+		descY = 142;
 		stateY = 72;
 		buttonY = 26;
 	}
@@ -200,6 +201,8 @@ void RegionWindow::updateInfo(RegionType type)
 void RegionWindow::buttonCallback(cocos2d::Ref* sender)
 {
 	auto parent = static_cast<MapTab*>(getParent());
+
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 
 	if (m_ActLabel->getString() == "조사")
 	{

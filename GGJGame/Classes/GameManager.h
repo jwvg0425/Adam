@@ -41,6 +41,7 @@ public:
 	RegionType							getDevelopRegion();
 	void								initRegionDistance();
 	bool								isGameOver();
+	bool								testGameClear();
 
 private:
 	GameManager();

@@ -210,6 +210,7 @@ void MainUILayer::update(float dTime)
 
 void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	ResearchTab* researchTab = ResearchTab::create();
 	Window* window = Window::createWithTabs("research", researchTab, nullptr);
 	addChild(window);
@@ -218,6 +219,7 @@ void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	ReportTab* reportTab = ReportTab::create();
 	Window* window = Window::createWithTabs("report", reportTab, nullptr);
 	addChild(window);
@@ -226,6 +228,7 @@ void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::nextMonthButtonCallback(cocos2d::Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	GameManager::getInstance()->turnEnd(static_cast<Layer*>(getParent()));
 }
 
@@ -237,6 +240,7 @@ void MainUILayer::setUIVisible(bool visible)
 
 void MainUILayer::mapButtonCallback(cocos2d::Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	MapTab* mapTab = MapTab::create();
 	Window* window = Window::createWithTabs("map", mapTab, nullptr);
 	addChild(window);

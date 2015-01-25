@@ -84,6 +84,7 @@ void ReportTab::initMenu(int page)
 
 void ReportTab::headerCallback(cocos2d::Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	char date[256];
 	auto item = static_cast<MenuItem*>(sender);
 	int tag = item->getTag();

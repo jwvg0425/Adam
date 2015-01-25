@@ -79,6 +79,7 @@ void Window::setCaption(std::string caption)
 
 void Window::exitButtonCallback(Ref* sender)
 {
+	CocosDenshion::SimpleAudioEngine::getInstance()->playEffect("click.wav");
 	auto parent = static_cast<MainUILayer*>(getParent());
 
 	parent->setUIVisible(true);

@@ -10,9 +10,29 @@ RegionData::RegionData(const std::string& name, const std::string& spriteName, c
 	m_Area = area;
 	m_IsDeveloped = false;
 	m_IsKnown = false;
-	m_Radioactivity = 500 + rand() % 1000;
+
+	int type = rand() % 4;
+
+	switch (type)
+	{
+	case 0: //그나마 살만함
+		m_Radioactivity = 500 + rand() % 500;
+		m_Stablity = rand() % 100;
+		break;
+	case 1: //좀 힘듬
+		m_Radioactivity = 1000 + rand() % 1000;
+		m_Stablity = rand() % 50;
+		break;
+	case 2: //상황이 안 좋음
+		m_Radioactivity = 2500 + rand() % 1000;
+		m_Stablity = rand() % 10;
+		break;
+	case 3: //극악의 환경.
+		m_Radioactivity = 4000 + rand() % 1000;
+		m_Stablity = 0;
+	}
+
 	m_Wealthy = 0;
-	m_Stablity = rand() % 100;
 	m_DevelopTurn = 0;
 	m_Distance = 0;
 }
@@ -43,11 +63,11 @@ cocos2d::Color3B RegionData::getStateColor()
 	else if (m_IsKnown)
 	{
 		//safe, caution, danger 3단계가 있음. 
-		if (m_Radioactivity > 700 && m_Stablity < 100)
+		if (m_Radioactivity > 700 || m_Stablity < 200)
 		{
 			return REGION_DANGER;
 		}
-		else if (m_Radioactivity > 400 && m_Stablity < 200)
+		else if (m_Radioactivity > 400 || m_Stablity < 400)
 		{
 			return REGION_CAUTION;
 		}

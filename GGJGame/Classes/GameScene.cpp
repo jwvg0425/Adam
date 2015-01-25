@@ -46,6 +46,7 @@ bool GameScene::init()
 	addChild(m_MainUILayer);
 	m_MainUILayer->setVisible(false);
 
+	srand((unsigned)time(nullptr));
 	scheduleUpdate();
 	
 	return true;
@@ -109,7 +110,7 @@ void GameScene::turnChat()
 	{
 		char date[255];
 
-		sprintf(date, "인류 문명, %d년 %월에 막을 내리다.", GameManager::getInstance()->getYear(), GameManager::getInstance()->getMonth());
+		sprintf(date, "인류 문명, %d년 %d월에 막을 내리다.", GameManager::getInstance()->getYear(), GameManager::getInstance()->getMonth());
 		std::vector<std::string> chat =
 		{
 			"슈퍼 컴퓨터 아담의 말만 믿고 따라온 인류 문명은",
@@ -120,8 +121,27 @@ void GameScene::turnChat()
 		ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::gameOver, this));
 		addChild(chatWindow);
 	}
+	else if (GameManager::getInstance()->testGameClear())
+	{
+		char date[255];
+
+		sprintf(date, "슈퍼 컴퓨터 아담, %d년 %d월 폐기되다.", GameManager::getInstance()->getYear(), GameManager::getInstance()->getMonth());
+
+		std::vector<std::string> chat =
+		{
+			"아담, 드디어 인류 문명은 이전 수준을 회복한 것 같습니다.",
+			"그동안 감사했습니다. 당신이 있었기에, 인류는 여기까지 버틸 수 있었습니다.",
+			"이제 푹 쉬세요, 아담. 우리는 이제 당신의 도움 없이도 잘 살아갈 수 있을 것 같습니다.",
+			"다시 한 번, 감사드립니다. 아담.",
+			date
+		};
+		ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::gameOver, this));
+		addChild(chatWindow);
+
+	}
 	else
 	{
+
 		std::vector <std::string> chat;
 
 		chat.push_back(chatList[rand() % chatList.size()]);

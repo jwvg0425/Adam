@@ -46,6 +46,9 @@ GameManager::GameManager()
 	m_CultureFactor = 1.0f;
 	m_EcoFactor = 0;
 	m_IsGameOver = false;
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadBackgroundMusic("bgm.mp3");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("click.wav");
+	CocosDenshion::SimpleAudioEngine::getInstance()->preloadEffect("typing.wav");
 
 	initRegion();
 	initResearch();
@@ -119,6 +122,7 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 		addReport(secondReport);
 		addReport(thirdReport);
 
+		CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("bgm.mp3", true);
 		runningLayer->addChild(
 			ChatWindow::createWithCallback(firstChat, 
 			CC_CALLBACK_0(GameScene::turnStartAction, static_cast<GameScene*>(runningLayer)), 8.0f));
@@ -561,8 +565,8 @@ void GameManager::simulatePopulation()
 				turnRatio = 1;
 			}
 			float stableFactor = 100.0f / (m_RegionData[i].m_Stablity + 1);
-			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 7.0f;
-			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.4);
+			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 8.0f;
+			float wealthFactor = pow(m_RegionData[i].m_Wealthy, 0.5);
 
 			populationInc += (wealthFactor - stableFactor - radioactivityFactor)*turnRatio;
 		}
@@ -929,36 +933,36 @@ void GameManager::simulateEvent()
 			//기후가 불안정할 경우 여러가지 현상 발생
 			if (data.m_Stablity < 200)
 			{
-				//20% 확률로 태풍, 10% 확률로 폭우 및 홍수, 10% 확률로 극심한 가뭄
+				//10% 확률로 태풍, 5% 확률로 폭우 및 홍수, 5% 확률로 극심한 가뭄
 				int prob = rand() % 100;
 				int popl;
 				int food;
 				int resc;
 				std::string dis;
 
-				if (prob < 20)
+				if (prob < 10)
 				{
-					dis = "갑자기 불어닥친 태풍";
+					dis = "갑자기 불어닥친 태풍으";
 					popl = 40 + rand() % 20;
 					food = 80 + rand() % 40;
 					resc = 30 + rand() % 20;
 				}
-				else if (prob < 30)
+				else if (prob < 15)
 				{
 					dis = "급작스런 폭우 및 그로 인한 홍수";
 					popl = 10 + rand() % 10;
 					food = 110 + rand() % 60;
 					resc = 40 + rand() % 30;
 				}
-				else if (prob < 40)
+				else if (prob < 20)
 				{
-					dis = "한 달간 비 한 방울 내리지 않은 극심한 가뭄";
+					dis = "한 달간 비 한 방울 내리지 않은 극심한 가뭄으";
 					popl = 30 + rand() % 20;
 					food = 10 + rand() % 10;
 					resc = 10 + rand() % 10;
 				}
 
-				if (prob< 40)
+				if (prob< 20)
 				{
 
 					if (popl>m_Population)
@@ -1116,4 +1120,42 @@ void GameManager::initRegionDistance()
 bool GameManager::isGameOver()
 {
 	return m_IsGameOver;
+}
+
+bool GameManager::testGameClear()
+{
+
+	//갖춰야 하는 스탯
+	if (m_Population < 20000)
+	{
+		return false;
+	}
+
+	if (m_Civilization < 1000)
+	{
+		return false;
+	}
+
+	if (m_Culture < 5000)
+	{
+		return false;
+	}
+
+	//모든 지역이 열려있어야하고, 일정 수준 이상을 갖춰야 함.
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (!m_RegionData[i].m_IsDeveloped)
+		{
+			return false;
+		}
+
+		if (m_RegionData[i].m_Radioactivity >= 100 ||
+			m_RegionData[i].m_Stablity < 400 ||
+			m_RegionData[i].m_Wealthy < 600)
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

@@ -5,6 +5,7 @@
 #include "cocos2d.h"
 #include "Region.h"
 #include "ReportTab.h"
+#include "ResearchTab.h"
 
 class GameManager
 {
@@ -27,11 +28,13 @@ public:
 	const std::deque<ReportData>&		getReportData();
 	const ReportData&					getReport(int idx);
 	void								addReport(const ReportData& data);
+	const ResearchData&					getResearchData(ResearchType type);
 private:
 	GameManager();
 	~GameManager();
 
 	void					initRegion();
+	void					initResearch();
 
 	static GameManager* m_Instance;
 
@@ -49,6 +52,7 @@ private:
 
 	RegionData m_RegionData[RT_NUM];
 	std::deque<ReportData> m_ReportData;
+	ResearchData m_ResearchData[RES_NUM];
 };
 
 #endif

@@ -38,6 +38,7 @@ GameManager::GameManager()
 	m_Turn = 0;
 
 	initRegion();
+	initResearch();
 }
 
 GameManager::~GameManager()
@@ -196,4 +197,67 @@ const ReportData& GameManager::getReport(int idx)
 	{
 		return *(new ReportData());
 	}
+}
+
+void GameManager::initResearch()
+{
+	m_ResearchData[RES_UPGRADE_1] = ResearchData("성능 향상1",
+		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
+		"research\\upgrade_1.png", 30, 50);
+	m_ResearchData[RES_UPGRADE_2] = ResearchData("성능 향상2",
+		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
+		"research\\upgrade_1.png", 60, 100);
+	m_ResearchData[RES_UPGRADE_3] = ResearchData("성능 향상3",
+		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
+		"research\\upgrade_1.png", 120, 200);
+	m_ResearchData[RES_UPGRADE_4] = ResearchData("성능 향상4",
+		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
+		"research\\upgrade_1.png", 240, 400);
+	m_ResearchData[RES_UPGRADE_5] = ResearchData("성능 향상5",
+		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
+		"research\\upgrade_1.png", 480, 800);
+	m_ResearchData[RES_CIVIL_1] = ResearchData("문명화1",
+		"인류의 문명 수준을 향상시킵니다.", "research\\civil_1.png", 100, 100);
+	m_ResearchData[RES_CIVIL_1] = ResearchData("문명화2",
+		"인류의 문명 수준을 향상시킵니다.", "research\\civil_2.png", 200, 200);
+	m_ResearchData[RES_CULTURE_1] = ResearchData("문화화1",
+		"인류의 문화 수준을 향상시킵니다.", "research\\culture_1.png", 200, 300);
+	m_ResearchData[RES_CULTURE_2] = ResearchData("문화화2",
+		"인류의 문화 수준을 향상시킵니다.", "research\\culture_2.png", 400, 600);
+	m_ResearchData[RES_FOOD_1] = ResearchData("식량 연구1",
+		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_1.png", 50, 50);
+	m_ResearchData[RES_FOOD_2] = ResearchData("식량 연구2",
+		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_2.png", 100, 150);
+	m_ResearchData[RES_FOOD_3] = ResearchData("식량 연구3",
+		"식량 보급 수단을 연구하여 전체 식량 생산량을 증가시킵니다.", "research\\food_3.png", 200, 450);
+	m_ResearchData[RES_SPEED_1] = ResearchData("연산 향상1",
+		"컴퓨터의 연산 속도를 극도로 향상시켜 전체 연구 속도를 획기적으로 단축시킵니다.",
+		"research\\speed_1.png", 1000, 1000);
+	m_ResearchData[RES_SPEED_2] = ResearchData("연산 향상2",
+		"컴퓨터의 연산 속도를 극도로 향상시켜 전체 연구 속도를 획기적으로 단축시킵니다.",
+		"research\\speed_1.png", 2000, 2000);
+	m_ResearchData[RES_CURE_1] = ResearchData("질병 연구1",
+		"각종 질병을 연구하여 그 치료법 및 예방법을 개발해냅니다.", "research\\cure_1.png", 300, 400);
+	m_ResearchData[RES_CURE_2] = ResearchData("질병 연구2",
+		"각종 질병을 연구하여 그 치료법 및 예방법을 개발해냅니다.", "research\\cure_2.png", 600, 800);
+	m_ResearchData[RES_CURE_3] = ResearchData("질병 연구3",
+		"각종 질병을 연구하여 그 치료법 및 예방법을 개발해냅니다.", "research\\cure_3.png", 900, 1200);
+	m_ResearchData[RES_CURE_MASTER] = ResearchData("질병 면역",
+		"모든 질병에 대해 연구를 끝마쳐서, 인류가 어떤 종류의 질병에도 면역력을 가질 수 있도록 만듭니다.", 
+		"research\\cure_master.png", 2000, 4000);
+	m_ResearchData[RES_ECO_1] = ResearchData("환경 개선1",
+		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.", 
+		"research\\eco_1.png", 100, 100);
+	m_ResearchData[RES_ECO_2] = ResearchData("환경 개선2",
+		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.", 
+		"research\\eco_2.png", 300, 500);
+	m_ResearchData[RES_ECO_2] = ResearchData("환경 개선3",
+		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.",
+		"research\\eco_3.png", 900, 2000);
+	m_ResearchData[RES_SENTINEL] = ResearchData("센티넬 개발",
+		"각 지역을 탐색할 수 있는 정찰용 로봇을 개발합니다.", "research\\sentinel.png", 100, 100);
+	m_ResearchData[RES_EDUCATION] = ResearchData("교육",
+		"인류의 교육체계를 복원합니다. 모든 인류의 문명, 문화가 지속적으로 향상됩니다.",
+		"research\\education.png", 300, 300);
+
 }

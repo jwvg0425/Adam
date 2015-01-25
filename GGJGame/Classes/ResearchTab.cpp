@@ -26,3 +26,32 @@ bool ResearchTab::init()
 
 	return true;
 }
+
+ResearchData::ResearchData()
+{
+	m_Name = "";
+	m_Description = "";
+	m_IconName = "";
+	m_NeedResource = 0;
+	m_NeedPeriod = 0;
+	m_Process = 0;
+	m_IsCompleted = false;
+
+}
+
+ResearchData::ResearchData(const std::string& name, const std::string& description,
+	const std::string& iconName, int needResource, int needPeriod)
+{
+	m_Name = name;
+	m_Description = description;
+	m_IconName = iconName;
+	m_NeedResource = needResource;
+	m_NeedPeriod = needPeriod;
+	m_Process = 0;
+	m_IsCompleted = false;
+}
+
+ResearchData::~ResearchData()
+{
+
+}

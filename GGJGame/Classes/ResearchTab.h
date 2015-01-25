@@ -2,6 +2,7 @@
 #ifndef _RESEARCH_TAB_H_
 #define _RESEARCH_TAB_H_
 #include "Tab.h"
+#include "macro.h"
 
 struct ResearchData
 {
@@ -32,11 +33,14 @@ public:
 
 	virtual bool init();
 	void researchIconCallback(Ref* sender);
+	void confirmResearchCallback(Ref* sender);
 
 	virtual void update(float dTime);
 
 	CREATE_FUNC(ResearchTab);
 private:
+	ResearchType m_Selected;
+
 	cocos2d::Sprite* m_TechTree;
 	cocos2d::Menu* m_IconMenu;
 	cocos2d::Menu* m_ConfirmMenu;
@@ -44,6 +48,7 @@ private:
 	cocos2d::Label* m_ResearchNameLabel;
 	cocos2d::Label* m_ResearchDescLabel;
 	cocos2d::Label* m_ResearchResourceLabel;
+	cocos2d::Label* m_ConfirmLabel;
 };
 
 #endif

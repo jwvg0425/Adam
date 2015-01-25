@@ -28,7 +28,12 @@ public:
 	const std::deque<ReportData>&		getReportData();
 	const ReportData&					getReport(int idx);
 	void								addReport(const ReportData& data);
+	void								addRegularReport();
 	const ResearchData&					getResearchData(ResearchType type);
+	void								setResearch(ResearchType type);
+	ResearchType						getResearch();
+	void								simulate();
+
 private:
 	GameManager();
 	~GameManager();
@@ -46,6 +51,7 @@ private:
 	int m_Year;
 	int m_Month;
 	bool m_IsChatting;
+	ResearchType m_Research;
 
 	//몇 번째 차례인지. 겉으로 보이긴 year / month 가 기준이지만 실제로는 이 turn을 바탕으로 시뮬레이션 수행.
 	int m_Turn;

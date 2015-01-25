@@ -36,6 +36,7 @@ GameManager::GameManager()
 	m_Year = 4000;
 	m_Month = 1;
 	m_Turn = 0;
+	m_Research = RES_NONE;
 
 	initRegion();
 	initResearch();
@@ -115,12 +116,19 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 	}
 	else
 	{
+		//날짜 갱신
 		m_Month++;
 		if (m_Month > 12)
 		{
 			m_Month = 1;
 			m_Year++;
 		}
+
+		//이전 달까지의 상황을 바탕으로 시뮬레이트.
+		simulate();
+
+		//정기 보고서 추가
+		addRegularReport();
 	}
 
 	m_Turn++;
@@ -293,4 +301,43 @@ void GameManager::initResearch()
 const ResearchData& GameManager::getResearchData(ResearchType type)
 {
 	return m_ResearchData[type];
+}
+
+void GameManager::addRegularReport()
+{
+	char reportHeader[255];
+	char reportContents[1024];
+
+	sprintf(reportHeader, "%d년%d월 정기보고서", m_Year, m_Month);
+	sprintf(reportContents, "저번 달 대비 변화는 다음과 같습니다.\n"
+		"인구: %d -> %d\n"
+		"식량: %d -> %d\n"
+		"자원: %d -> %d\n"
+		"문화: %d -> %d\n"
+		"문명: %d -> %d\n",
+		m_Population, m_Population,
+		m_Food, m_Food,
+		m_Resource, m_Resource,
+		m_Culture, m_Culture,
+		m_Civilization, m_Civilization);
+
+	ReportData report(reportHeader, reportContents, m_Year, m_Month);
+
+	addReport(report);
+}
+
+void GameManager::setResearch(ResearchType type)
+{
+	m_Research = type;
+}
+
+ResearchType GameManager::getResearch()
+{
+	return m_Research;
+}
+
+void GameManager::simulate()
+{
+	//초기화 작업
+	m_Research = RES_NONE;
 }

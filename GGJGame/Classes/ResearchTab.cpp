@@ -11,6 +11,7 @@ ResearchTab::ResearchTab()
 	m_ResearchNameLabel = nullptr;
 	m_ResearchDescLabel = nullptr;
 	m_ResearchResourceLabel = nullptr;
+	m_Selected = RES_NONE;
 }
 
 ResearchTab::~ResearchTab()
@@ -77,12 +78,38 @@ bool ResearchTab::init()
 	m_ResearchDescLabel->setAnchorPoint(Point(0, 1));
 	m_ResearchDescLabel->setPosition(WND_WIDTH / 2 + 110, WND_HEIGHT / 2 + 95);
 
-	m_ResearchResourceLabel = Label::createWithSystemFont("필요 자원\n123\n456\n789", TEXT_FONT, 16);
+	m_ResearchResourceLabel = Label::createWithSystemFont("", TEXT_FONT, 12, Size(120,120));
 	m_ResearchResourceLabel->setColor(TEXT_COLOR);
+	m_ResearchResourceLabel->setAnchorPoint(Point(0, 1));
+	m_ResearchResourceLabel->setPosition(WND_WIDTH / 2 + 110, WND_HEIGHT / 2 + 15);
 
 	addChild(m_ResearchNameLabel);
 	addChild(m_ResearchDescLabel);
 	addChild(m_ResearchResourceLabel);
+
+	auto confirm = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(ResearchTab::confirmResearchCallback, this));
+	auto label = Label::createWithSystemFont("연구", TEXT_FONT, 20);
+	label->setColor(TEXT_COLOR);
+	label->setPosition(48, 16);
+	confirm->addChild(label);
+
+	m_ConfirmMenu = Menu::create(confirm,nullptr);
+	m_ConfirmMenu->setPosition(WND_WIDTH / 2 + 170, WND_HEIGHT / 2 - 120);
+	m_ConfirmMenu->setVisible(false);
+
+	addChild(m_ConfirmMenu);
+
+	char confirmStr[255] = { 0, };
+	ResearchType type = GameManager::getInstance()->getResearch();
+
+	sprintf(confirmStr, "이번 달 연구 예정: %s", type == RES_NONE ? "" : GameManager::getInstance()->getResearchData(type).m_Name.c_str());
+
+	m_ConfirmLabel = Label::createWithSystemFont(confirmStr, TEXT_FONT, 16);
+	m_ConfirmLabel->setColor(TEXT_COLOR);
+	m_ConfirmLabel->setAnchorPoint(Point(0, 1));
+	m_ConfirmLabel->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2 - 145);
+
+	addChild(m_ConfirmLabel);
 
 	scheduleUpdate();
 
@@ -94,9 +121,30 @@ void ResearchTab::researchIconCallback(Ref* sender)
 	auto item = static_cast<MenuItem*>(sender);
 	int tag = item->getTag();
 	auto data = GameManager::getInstance()->getResearchData(static_cast<ResearchType>(tag));
+	auto state = data.getStateColor();
+	char resource[255] = { 0, };
 
 	m_ResearchNameLabel->setString(data.m_Name);
 	m_ResearchDescLabel->setString(data.m_Description);
+	
+	sprintf(resource, "진행률 : %.2f %% \n"
+		"예상 소요시간 : %d 개월\n"
+		"필요 자원 : %d / %d",
+		(static_cast<float>(data.m_Progress) / data.m_NeedPeriod) * 100, 10,
+		data.m_NeedResource, GameManager::getInstance()->getResource());
+
+	m_ResearchResourceLabel->setString(resource);
+
+	if (state == RESEARCH_VALID || state == RESEARCH_PROGRESS)
+	{
+		m_ConfirmMenu->setVisible(true);
+	}
+	else
+	{
+		m_ConfirmMenu->setVisible(false);
+	}
+
+	m_Selected = static_cast<ResearchType>(tag);
 }
 
 void ResearchTab::update(float dTime)
@@ -108,6 +156,18 @@ void ResearchTab::update(float dTime)
 
 		item->setColor(data.getStateColor());
 	}
+}
+
+void ResearchTab::confirmResearchCallback(Ref* sender)
+{
+	auto data = GameManager::getInstance()->getResearchData(m_Selected);
+	char confirmStr[255] = { 0, };
+
+	sprintf(confirmStr, "이번 달 연구 예정: %s", data.m_Name.c_str());
+
+	m_ConfirmLabel->setString(confirmStr);
+
+	GameManager::getInstance()->setResearch(m_Selected);
 }
 
 ResearchData::ResearchData()
@@ -167,6 +227,13 @@ cocos2d::Color3B ResearchData::getStateColor()
 		{
 			return RESEARCH_INVALID;
 		}
+	}
+
+
+	//자원이 부족한 경우
+	if (m_NeedResource > GameManager::getInstance()->getResource())
+	{
+		return RESEARCH_INVALID;
 	}
 
 	return RESEARCH_VALID;

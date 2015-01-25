@@ -3,7 +3,6 @@
 #define _MAIN_UI_LAYER_H_
 
 #include "cocos2d.h"
-#define MAIN_MENU_TAG 1
 
 class MainUILayer : public cocos2d::Layer
 {
@@ -18,6 +17,9 @@ public:
 	void labButtonCallback(cocos2d::Ref* sender);
 	void orderButtonCallback(cocos2d::Ref* sender);
 	void reportButtonCallback(cocos2d::Ref* sender);
+	void nextMonthButtonCallback(cocos2d::Ref* sender);
+
+	void setUIVisible(bool visible);
 
 	CREATE_FUNC(MainUILayer);
 private:
@@ -37,6 +39,7 @@ private:
 
 	cocos2d::Label* m_Labels[LABEL_NUM];
 	cocos2d::Menu* m_MainMenu;
+	cocos2d::Menu* m_NextMonthMenu;
 
 	int m_PrevYear;
 	int m_PrevMonth;

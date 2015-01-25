@@ -4,6 +4,7 @@
 #include "Window.h"
 #include "ChatWindow.h"
 #include "MapTab.h"
+#include "ReportTab.h"
 #define UI_X (WND_WIDTH - 5)
 #define UI_Y (WND_HEIGHT - 5)
 
@@ -19,6 +20,7 @@ MainUILayer::MainUILayer()
 	m_PrevCulture = 0;
 	m_PrevResource = 0;
 	m_PrevFood = 0;
+	m_NextMonthMenu = nullptr;
 
 	for (int i = 0; i < LABEL_NUM; i++)
 	{
@@ -132,8 +134,18 @@ bool MainUILayer::init()
 
 	m_MainMenu = Menu::create(labButton, orderButton, reportButton, nullptr);
 	m_MainMenu->alignItemsVerticallyWithPadding(4);
-	addChild(m_MainMenu, 0, MAIN_MENU_TAG);
+	addChild(m_MainMenu);
 	m_MainMenu->setPosition(Point(53, WND_HEIGHT - 59));
+
+	auto nextButton = MenuItemImage::create("button.png", "button_down.png", CC_CALLBACK_1(MainUILayer::nextMonthButtonCallback, this));
+	auto nextLabel = Label::createWithSystemFont("다음 달로", TEXT_FONT, 16);
+	nextLabel->setColor(TEXT_COLOR);
+	nextLabel->setPosition(48, 16);
+	nextButton->addChild(nextLabel);
+
+	m_NextMonthMenu = Menu::create(nextButton, nullptr);
+	addChild(m_NextMonthMenu);
+	m_NextMonthMenu->setPosition(Point(WND_WIDTH - 60, 40));
 
 	scheduleUpdate();
 
@@ -198,19 +210,31 @@ void MainUILayer::update(float dTime)
 void MainUILayer::labButtonCallback(cocos2d::Ref* sender)
 {
 	addChild(Window::createWithCaption("research"));
-	m_MainMenu->setVisible(false);
+	setUIVisible(false);
 }
 
 void MainUILayer::orderButtonCallback(cocos2d::Ref* sender)
 {
 	addChild(Window::createWithCaption("order"));;
-	m_MainMenu->setVisible(false);
+	setUIVisible(false);
 }
 
 void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 {
 	MapTab* mapTab = MapTab::create();
-	Window* window = Window::createWithTabs("report", mapTab, nullptr);
+	ReportTab* reportTab = ReportTab::create();
+	Window* window = Window::createWithTabs("report", reportTab, mapTab, nullptr);
 	addChild(window);
-	m_MainMenu->setVisible(false);
+	setUIVisible(false);
+}
+
+void MainUILayer::nextMonthButtonCallback(cocos2d::Ref* sender)
+{
+	GameManager::getInstance()->turnEnd(this);
+}
+
+void MainUILayer::setUIVisible(bool visible)
+{
+	m_MainMenu->setVisible(visible);
+	m_NextMonthMenu->setVisible(visible);
 }

@@ -79,8 +79,9 @@ void Window::setCaption(std::string caption)
 
 void Window::exitButtonCallback(Ref* sender)
 {
-	auto menu = getParent()->getChildByTag(MAIN_MENU_TAG);
-	menu->setVisible(true);
+	auto parent = static_cast<MainUILayer*>(getParent());
+
+	parent->setUIVisible(true);
 	removeFromParent();
 }
 
@@ -163,6 +164,7 @@ void Window::initTabs(const std::vector<Tab*>& tabs)
 		items.pushBack(item);
 		
 		addChild(tab);
+		tab->setContentsVisible(false);
 		m_Tabs.push_back(tab);
 		
 	}

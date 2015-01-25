@@ -20,7 +20,7 @@ public:
 	int						getYear();
 	int						getMonth();
 	void					turnStart(cocos2d::Layer* runningLayer);
-	void					turnEnd();
+	void					turnEnd(cocos2d::Layer* runningLayer);
 	void					setChatting(bool chat);
 	bool					isChatting();
 	const RegionData&		getRegionData(RegionType type);

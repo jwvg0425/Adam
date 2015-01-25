@@ -83,3 +83,15 @@ void MapTab::onMouseMove(cocos2d::Event* event)
 		m_Regions[i]->setRegionColor(data.getStateColor());
 	}
 }
+
+void MapTab::setContentsVisible(bool visible)
+{
+	Tab::setContentsVisible(visible);
+
+	m_Sea->setVisible(visible);
+
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		m_Regions[i]->setVisible(visible);
+	}
+}

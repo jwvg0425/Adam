@@ -15,6 +15,10 @@ struct RegionData
 	std::string m_SpriteName;
 	cocos2d::Rect m_Area;
 	float m_IsDeveloped;
+	float m_IsKnown;
+	int m_Radioactivity;
+	int m_Wealthy;
+	int m_Stablity;
 };
 
 class Region : public cocos2d::Node

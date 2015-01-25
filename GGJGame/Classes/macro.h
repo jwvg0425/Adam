@@ -7,7 +7,7 @@
 #define WND_HEIGHT 480
 #define TEXT_COLOR (cocos2d::Color3B(191, 228, 230))
 #define TEXT_FONT ("NanumBarunGothicBold")
-#define REGION_DEVELOP (cocos2d::Color3B(116,164,53))
+#define REGION_DEVELOP (cocos2d::Color3B(172,211,115))
 #define REGION_UNKNOWN (cocos2d::Color3B(0,0,0))
 #define REGION_DANGER (cocos2d::Color3B(255,64,64))
 #define REGION_CAUTION (cocos2d::Color3B(255,149,25))

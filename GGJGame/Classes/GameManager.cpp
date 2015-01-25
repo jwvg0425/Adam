@@ -96,11 +96,22 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 			ChatWindow::createWithCallback(firstChat, 
 			CC_CALLBACK_0(GameScene::gameStartAction, static_cast<GameScene*>(runningLayer)), 8.0f));
 	}
+	else
+	{
+		m_Month++;
+		if (m_Month > 12)
+		{
+			m_Month = 1;
+			m_Year++;
+		}
+	}
+
+	m_Turn++;
 }
 
-void GameManager::turnEnd()
+void GameManager::turnEnd(cocos2d::Layer* runningLayer)
 {
-
+	turnStart(runningLayer);
 }
 
 void GameManager::setChatting(bool chat)
@@ -136,6 +147,12 @@ void GameManager::initRegion()
 	m_RegionData[RT_SOUTH_EAST_ASIA] = RegionData("동남 아시아", "map\\south_east_asia.png", Rect(155, 141, 80, 65));
 	m_RegionData[RT_SOUTH_WEST_ASIA] = RegionData("서남 아시아", "map\\south_west_asia.png", Rect(64, 114, 51, 45));
 	m_RegionData[RT_WEST_AFRICA] = RegionData("서 아프리카", "map\\west_africa.png", Rect(3, 126, 52, 70));
+
+	m_RegionData[RT_KOREA].m_IsDeveloped = true;
+	m_RegionData[RT_KOREA].m_IsKnown = true;
+	m_RegionData[RT_KOREA].m_Radioactivity = 100;
+	m_RegionData[RT_KOREA].m_Stablity = 200;
+	m_RegionData[RT_KOREA].m_Wealthy = 50;
 }
 
 const RegionData& GameManager::getRegionData(RegionType type)

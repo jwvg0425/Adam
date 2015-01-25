@@ -16,6 +16,8 @@ public:
 
 	void onMouseMove(cocos2d::Event* event);
 
+	virtual void setContentsVisible(bool visible);
+
 	CREATE_FUNC(MapTab);
 private:
 	cocos2d::Sprite* m_Sea;

@@ -57,6 +57,9 @@
     <ClCompile Include="..\Classes\Region.cpp">
       <Filter>Classes\Util</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\ReportTab.cpp">
+      <Filter>Classes\Tab</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Region.h">
       <Filter>Classes\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\ReportTab.h">
+      <Filter>Classes\Tab</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

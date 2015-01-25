@@ -63,6 +63,9 @@
     <ClCompile Include="..\Classes\ResearchTab.cpp">
       <Filter>Classes\Tab</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\RegionWindow.cpp">
+      <Filter>Classes\Window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -103,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\ResearchTab.h">
       <Filter>Classes\Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\RegionWindow.h">
+      <Filter>Classes\Window</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

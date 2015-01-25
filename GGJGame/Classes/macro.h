@@ -15,6 +15,7 @@
 #define REGION_CAUTION (cocos2d::Color3B(255,149,25))
 #define REGION_SAFE (cocos2d::Color3B(57,108,108))
 #define REGION_MOVE (cocos2d::Color3B(204,204,204))
+#define REGION_SELECTED (cocos2d::Color3B(255,255,255))
 
 #define RESEARCH_INVALID (cocos2d::Color3B(60,60,60))
 #define RESEARCH_COMPLETE (cocos2d::Color3B(255,255,255))

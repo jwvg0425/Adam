@@ -11,15 +11,17 @@ struct ResearchData
 
 	int m_NeedResource;
 	int m_NeedPeriod;
-	int m_Process;
+	int m_Progress;
 
 	bool m_IsCompleted;
-	std::vector<std::string> m_NeedResearch;
+	std::vector<ResearchData> m_NeedResearch;
 
 	ResearchData();
 	ResearchData(const std::string& name, const std::string& description,
 		const std::string& iconName,  int needResource, int needPeriod);
 	~ResearchData();
+
+	cocos2d::Color3B getStateColor();
 };
 
 class ResearchTab : public Tab
@@ -29,10 +31,19 @@ public:
 	~ResearchTab();
 
 	virtual bool init();
+	void researchIconCallback(Ref* sender);
+
+	virtual void update(float dTime);
 
 	CREATE_FUNC(ResearchTab);
 private:
 	cocos2d::Sprite* m_TechTree;
+	cocos2d::Menu* m_IconMenu;
+	cocos2d::Menu* m_ConfirmMenu;
+
+	cocos2d::Label* m_ResearchNameLabel;
+	cocos2d::Label* m_ResearchDescLabel;
+	cocos2d::Label* m_ResearchResourceLabel;
 };
 
 #endif

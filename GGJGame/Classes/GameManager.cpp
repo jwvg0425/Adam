@@ -206,19 +206,19 @@ void GameManager::initResearch()
 		"research\\upgrade_1.png", 30, 50);
 	m_ResearchData[RES_UPGRADE_2] = ResearchData("성능 향상2",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_1.png", 60, 100);
+		"research\\upgrade_2.png", 60, 100);
 	m_ResearchData[RES_UPGRADE_3] = ResearchData("성능 향상3",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_1.png", 120, 200);
+		"research\\upgrade_3.png", 120, 200);
 	m_ResearchData[RES_UPGRADE_4] = ResearchData("성능 향상4",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_1.png", 240, 400);
+		"research\\upgrade_4.png", 240, 400);
 	m_ResearchData[RES_UPGRADE_5] = ResearchData("성능 향상5",
 		"컴퓨터의 성능을 향상시켜 전체 개발 속도를 높이고 효율적으로 만듭니다.",
-		"research\\upgrade_1.png", 480, 800);
+		"research\\upgrade_5.png", 480, 800);
 	m_ResearchData[RES_CIVIL_1] = ResearchData("문명화1",
 		"인류의 문명 수준을 향상시킵니다.", "research\\civil_1.png", 100, 100);
-	m_ResearchData[RES_CIVIL_1] = ResearchData("문명화2",
+	m_ResearchData[RES_CIVIL_2] = ResearchData("문명화2",
 		"인류의 문명 수준을 향상시킵니다.", "research\\civil_2.png", 200, 200);
 	m_ResearchData[RES_CULTURE_1] = ResearchData("문화화1",
 		"인류의 문화 수준을 향상시킵니다.", "research\\culture_1.png", 200, 300);
@@ -235,7 +235,7 @@ void GameManager::initResearch()
 		"research\\speed_1.png", 1000, 1000);
 	m_ResearchData[RES_SPEED_2] = ResearchData("연산 향상2",
 		"컴퓨터의 연산 속도를 극도로 향상시켜 전체 연구 속도를 획기적으로 단축시킵니다.",
-		"research\\speed_1.png", 2000, 2000);
+		"research\\speed_2.png", 2000, 2000);
 	m_ResearchData[RES_CURE_1] = ResearchData("질병 연구1",
 		"각종 질병을 연구하여 그 치료법 및 예방법을 개발해냅니다.", "research\\cure_1.png", 300, 400);
 	m_ResearchData[RES_CURE_2] = ResearchData("질병 연구2",
@@ -251,7 +251,7 @@ void GameManager::initResearch()
 	m_ResearchData[RES_ECO_2] = ResearchData("환경 개선2",
 		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.", 
 		"research\\eco_2.png", 300, 500);
-	m_ResearchData[RES_ECO_2] = ResearchData("환경 개선3",
+	m_ResearchData[RES_ECO_3] = ResearchData("환경 개선3",
 		"각 지역의 방사능 수치를 감소시키고, 기후를 안정화시킬 방법을 모색합니다.",
 		"research\\eco_3.png", 900, 2000);
 	m_ResearchData[RES_SENTINEL] = ResearchData("센티넬 개발",
@@ -260,4 +260,37 @@ void GameManager::initResearch()
 		"인류의 교육체계를 복원합니다. 모든 인류의 문명, 문화가 지속적으로 향상됩니다.",
 		"research\\education.png", 300, 300);
 
+	m_ResearchData[RES_UPGRADE_2].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_1]);
+	m_ResearchData[RES_UPGRADE_3].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_2]);
+	m_ResearchData[RES_UPGRADE_4].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_3]);
+	m_ResearchData[RES_UPGRADE_5].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_4]);
+
+	m_ResearchData[RES_SENTINEL].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_1]);
+	m_ResearchData[RES_EDUCATION].m_NeedResearch.push_back(m_ResearchData[RES_SENTINEL]);
+
+	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(m_ResearchData[RES_ECO_1]);
+	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(m_ResearchData[RES_SENTINEL]);
+	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(m_ResearchData[RES_ECO_2]);
+	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_4]);
+
+	m_ResearchData[RES_CIVIL_2].m_NeedResearch.push_back(m_ResearchData[RES_CIVIL_1]);
+
+	m_ResearchData[RES_CULTURE_1].m_NeedResearch.push_back(m_ResearchData[RES_ECO_1]);
+	m_ResearchData[RES_CULTURE_2].m_NeedResearch.push_back(m_ResearchData[RES_CULTURE_1]);
+
+	m_ResearchData[RES_FOOD_2].m_NeedResearch.push_back(m_ResearchData[RES_FOOD_1]);
+	m_ResearchData[RES_FOOD_3].m_NeedResearch.push_back(m_ResearchData[RES_FOOD_2]);
+
+	m_ResearchData[RES_SPEED_1].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_3]);
+	m_ResearchData[RES_SPEED_2].m_NeedResearch.push_back(m_ResearchData[RES_SPEED_1]);
+
+	m_ResearchData[RES_CURE_2].m_NeedResearch.push_back(m_ResearchData[RES_CURE_1]);
+	m_ResearchData[RES_CURE_3].m_NeedResearch.push_back(m_ResearchData[RES_CURE_2]);
+	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(m_ResearchData[RES_CURE_3]);
+	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(m_ResearchData[RES_SPEED_1]);
+}
+
+const ResearchData& GameManager::getResearchData(ResearchType type)
+{
+	return m_ResearchData[type];
 }

@@ -5,14 +5,22 @@
 
 #define WND_WIDTH 640
 #define WND_HEIGHT 480
+
 #define TEXT_COLOR (cocos2d::Color3B(191, 228, 230))
 #define TEXT_FONT ("나눔고딕")
+
 #define REGION_DEVELOP (cocos2d::Color3B(172,211,115))
 #define REGION_UNKNOWN (cocos2d::Color3B(0,0,0))
 #define REGION_DANGER (cocos2d::Color3B(255,64,64))
 #define REGION_CAUTION (cocos2d::Color3B(255,149,25))
 #define REGION_SAFE (cocos2d::Color3B(57,108,108))
 #define REGION_MOVE (cocos2d::Color3B(204,204,204))
+
+#define RESEARCH_INVALID (cocos2d::Color3B(60,60,60))
+#define RESEARCH_COMPLETE (cocos2d::Color3B(255,255,255))
+#define RESEARCH_PROGRESS (cocos2d::Color3B(255,149,25))
+#define RESEARCH_VALID (cocos2d::Color3B(141,198,63))
+
 #define MAP_ORIGIN_X 93
 #define MAP_ORIGIN_Y 387
 

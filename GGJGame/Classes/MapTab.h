@@ -20,6 +20,7 @@ public:
 
 	virtual void setContentsVisible(bool visible);
 
+	RegionType getSelectedRegion();
 	void initSelectedRegion();
 
 	CREATE_FUNC(MapTab);

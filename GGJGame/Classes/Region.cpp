@@ -13,6 +13,8 @@ RegionData::RegionData(const std::string& name, const std::string& spriteName, c
 	m_Radioactivity = 1000;
 	m_Wealthy = 0;
 	m_Stablity = 0;
+	m_DevelopTurn = 0;
+	m_Distance = 0;
 }
 
 RegionData::RegionData()
@@ -58,6 +60,41 @@ cocos2d::Color3B RegionData::getStateColor()
 	{
 		return REGION_UNKNOWN;
 	}
+}
+
+int RegionData::getDistance()
+{
+	GameManager::getInstance()->initRegionDistance();
+
+	std::queue<RegionData*> dataQueue;
+
+	m_Distance = 0;
+
+	dataQueue.push(this);
+
+	while (!dataQueue.empty())
+	{
+		RegionData* region = dataQueue.front();
+
+		dataQueue.pop();
+
+		for (int i = 0; i < region->m_Neighbor.size(); i++)
+		{
+			if (region->m_Neighbor[i]->m_Distance == -1)
+			{
+				dataQueue.push(region->m_Neighbor[i]);
+			}
+
+			region->m_Neighbor[i]->m_Distance = region->m_Distance + 1;
+
+			if (region->m_Neighbor[i]->m_IsDeveloped)
+			{
+				return region->m_Neighbor[i]->m_Distance;
+			}
+		}
+	}
+
+	return -1;
 }
 
 Region::Region()

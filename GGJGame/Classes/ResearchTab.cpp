@@ -123,6 +123,12 @@ void ResearchTab::researchIconCallback(Ref* sender)
 	auto data = GameManager::getInstance()->getResearchData(static_cast<ResearchType>(tag));
 	auto state = data.getStateColor();
 	char resource[255] = { 0, };
+	int period = (data.m_NeedPeriod - data.m_Progress) / GameManager::getInstance()->getTechnique();
+
+	if (period == 0)
+	{
+		period = 1;
+	}
 
 	m_ResearchNameLabel->setString(data.m_Name);
 	m_ResearchDescLabel->setString(data.m_Description);
@@ -130,10 +136,20 @@ void ResearchTab::researchIconCallback(Ref* sender)
 	sprintf(resource, "진행률 : %.2f %% \n"
 		"예상 소요시간 : %d 개월\n"
 		"필요 자원 : %d / %d",
-		(static_cast<float>(data.m_Progress) / data.m_NeedPeriod) * 100, 10,
+		(static_cast<float>(data.m_Progress) / data.m_NeedPeriod) * 100,
+		period,
 		data.m_NeedResource, GameManager::getInstance()->getResource());
 
 	m_ResearchResourceLabel->setString(resource);
+
+	if (state == RESEARCH_COMPLETE)
+	{
+		m_ResearchResourceLabel->setVisible(false);
+	}
+	else
+	{
+		m_ResearchResourceLabel->setVisible(true);
+	}
 
 	if (state == RESEARCH_VALID || state == RESEARCH_PROGRESS)
 	{
@@ -217,7 +233,7 @@ cocos2d::Color3B ResearchData::getStateColor()
 
 		for (auto& research : m_NeedResearch)
 		{
-			if (!research.m_IsCompleted)
+			if (!research->m_IsCompleted)
 			{
 				isValid = false;
 			}

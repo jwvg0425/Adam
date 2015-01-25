@@ -10,6 +10,7 @@ struct RegionData
 	RegionData();
 	~RegionData();
 	cocos2d::Color3B getStateColor();
+	int getDistance();
 
 	std::string m_Name;
 	std::string m_SpriteName;
@@ -19,6 +20,8 @@ struct RegionData
 	int m_Radioactivity;
 	int m_Wealthy;
 	int m_Stablity;
+	int m_DevelopTurn;
+	int m_Distance;
 	std::vector<RegionData*> m_Neighbor;
 };
 

@@ -34,6 +34,12 @@ public:
 	ResearchType						getResearch();
 	void								simulate();
 	int									getTurn();
+	int									getTechnique();
+	void								setSurveyRegion(RegionType type);
+	void								setDevelopRegion(RegionType type);
+	RegionType							getSurveyRegion();
+	RegionType							getDevelopRegion();
+	void								initRegionDistance();
 
 private:
 	GameManager();
@@ -41,6 +47,16 @@ private:
 
 	void					initRegion();
 	void					initResearch();
+	void					completeResearch(ResearchType type);
+
+	void					simulatePopulation();
+	void					simulateFood();
+	void					simulateResource();
+	void					simulateCulture();
+	void					simulateCivilization();
+	void					simulateTechnique();
+	void					simulateRegion();
+	void					simulateEvent();
 
 	static GameManager* m_Instance;
 
@@ -61,6 +77,8 @@ private:
 
 	bool m_IsChatting;
 	ResearchType m_Research;
+	RegionType m_SurveyRegion;
+	RegionType m_DevelopRegion;
 
 	//몇 번째 차례인지. 겉으로 보이긴 year / month 가 기준이지만 실제로는 이 turn을 바탕으로 시뮬레이션 수행.
 	int m_Turn;
@@ -68,6 +86,13 @@ private:
 	RegionData m_RegionData[RT_NUM];
 	std::deque<ReportData> m_ReportData;
 	ResearchData m_ResearchData[RES_NUM];
+
+	int m_Technique;
+	int m_EcoFactor;
+	float m_FoodFactor;
+	float m_FoodExp;
+	float m_CivilInc;
+	float m_CultureFactor;
 };
 
 #endif

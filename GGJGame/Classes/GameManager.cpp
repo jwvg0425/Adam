@@ -32,11 +32,19 @@ GameManager::GameManager()
 	m_Culture = 0;
 	m_Population = 507;
 	m_Food = 1000;
-	m_Resource = 100;
+	m_Resource = 200;
 	m_Year = 4000;
 	m_Month = 1;
 	m_Turn = 0;
 	m_Research = RES_NONE;
+	m_SurveyRegion = RT_NONE;
+	m_DevelopRegion = RT_NONE;
+	m_Technique = 30;
+	m_FoodFactor = 1.0f;
+	m_FoodExp = 0.5f;
+	m_CivilInc = 1;
+	m_CultureFactor = 1.0f;
+	m_EcoFactor = 0;
 
 	initRegion();
 	initResearch();
@@ -186,6 +194,7 @@ void GameManager::initRegion()
 	m_RegionData[RT_KOREA].m_Radioactivity = 100;
 	m_RegionData[RT_KOREA].m_Stablity = 200;
 	m_RegionData[RT_KOREA].m_Wealthy = 50;
+	m_RegionData[RT_KOREA].m_DevelopTurn = 1;
 
 	m_RegionData[RT_KOREA].m_Neighbor.push_back(&m_RegionData[RT_CHINA]);
 	m_RegionData[RT_KOREA].m_Neighbor.push_back(&m_RegionData[RT_JAPAN]);
@@ -367,34 +376,34 @@ void GameManager::initResearch()
 		"인류의 교육체계를 복원합니다. 모든 인류의 문명, 문화가 지속적으로 향상됩니다.",
 		"research\\education.png", 300, 300);
 
-	m_ResearchData[RES_UPGRADE_2].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_1]);
-	m_ResearchData[RES_UPGRADE_3].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_2]);
-	m_ResearchData[RES_UPGRADE_4].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_3]);
-	m_ResearchData[RES_UPGRADE_5].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_4]);
+	m_ResearchData[RES_UPGRADE_2].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_1]);
+	m_ResearchData[RES_UPGRADE_3].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_2]);
+	m_ResearchData[RES_UPGRADE_4].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_3]);
+	m_ResearchData[RES_UPGRADE_5].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_4]);
 
-	m_ResearchData[RES_SENTINEL].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_1]);
-	m_ResearchData[RES_EDUCATION].m_NeedResearch.push_back(m_ResearchData[RES_SENTINEL]);
+	m_ResearchData[RES_SENTINEL].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_1]);
+	m_ResearchData[RES_EDUCATION].m_NeedResearch.push_back(&m_ResearchData[RES_SENTINEL]);
 
-	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(m_ResearchData[RES_ECO_1]);
-	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(m_ResearchData[RES_SENTINEL]);
-	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(m_ResearchData[RES_ECO_2]);
-	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_4]);
+	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(&m_ResearchData[RES_ECO_1]);
+	m_ResearchData[RES_ECO_2].m_NeedResearch.push_back(&m_ResearchData[RES_SENTINEL]);
+	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(&m_ResearchData[RES_ECO_2]);
+	m_ResearchData[RES_ECO_3].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_4]);
 
-	m_ResearchData[RES_CIVIL_2].m_NeedResearch.push_back(m_ResearchData[RES_CIVIL_1]);
+	m_ResearchData[RES_CIVIL_2].m_NeedResearch.push_back(&m_ResearchData[RES_CIVIL_1]);
 
-	m_ResearchData[RES_CULTURE_1].m_NeedResearch.push_back(m_ResearchData[RES_ECO_1]);
-	m_ResearchData[RES_CULTURE_2].m_NeedResearch.push_back(m_ResearchData[RES_CULTURE_1]);
+	m_ResearchData[RES_CULTURE_1].m_NeedResearch.push_back(&m_ResearchData[RES_ECO_1]);
+	m_ResearchData[RES_CULTURE_2].m_NeedResearch.push_back(&m_ResearchData[RES_CULTURE_1]);
 
-	m_ResearchData[RES_FOOD_2].m_NeedResearch.push_back(m_ResearchData[RES_FOOD_1]);
-	m_ResearchData[RES_FOOD_3].m_NeedResearch.push_back(m_ResearchData[RES_FOOD_2]);
+	m_ResearchData[RES_FOOD_2].m_NeedResearch.push_back(&m_ResearchData[RES_FOOD_1]);
+	m_ResearchData[RES_FOOD_3].m_NeedResearch.push_back(&m_ResearchData[RES_FOOD_2]);
 
-	m_ResearchData[RES_SPEED_1].m_NeedResearch.push_back(m_ResearchData[RES_UPGRADE_3]);
-	m_ResearchData[RES_SPEED_2].m_NeedResearch.push_back(m_ResearchData[RES_SPEED_1]);
+	m_ResearchData[RES_SPEED_1].m_NeedResearch.push_back(&m_ResearchData[RES_UPGRADE_3]);
+	m_ResearchData[RES_SPEED_2].m_NeedResearch.push_back(&m_ResearchData[RES_SPEED_1]);
 
-	m_ResearchData[RES_CURE_2].m_NeedResearch.push_back(m_ResearchData[RES_CURE_1]);
-	m_ResearchData[RES_CURE_3].m_NeedResearch.push_back(m_ResearchData[RES_CURE_2]);
-	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(m_ResearchData[RES_CURE_3]);
-	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(m_ResearchData[RES_SPEED_1]);
+	m_ResearchData[RES_CURE_2].m_NeedResearch.push_back(&m_ResearchData[RES_CURE_1]);
+	m_ResearchData[RES_CURE_3].m_NeedResearch.push_back(&m_ResearchData[RES_CURE_2]);
+	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(&m_ResearchData[RES_CURE_3]);
+	m_ResearchData[RES_CURE_MASTER].m_NeedResearch.push_back(&m_ResearchData[RES_SPEED_1]);
 }
 
 const ResearchData& GameManager::getResearchData(ResearchType type)
@@ -437,11 +446,376 @@ ResearchType GameManager::getResearch()
 
 void GameManager::simulate()
 {
+	simulateFood();
+	simulateResource();
+	simulateCivilization();
+	simulateCulture();
+	simulatePopulation();
+	simulateRegion();
+	simulateTechnique();
+
 	//초기화 작업
 	m_Research = RES_NONE;
+	m_DevelopRegion = RT_NONE;
+	m_SurveyRegion = RT_NONE;
 }
 
 int GameManager::getTurn()
 {
 	return m_Turn;
+}
+
+void GameManager::completeResearch(ResearchType type)
+{
+	switch (type)
+	{
+	case RES_UPGRADE_1:
+		m_Technique += 15;
+		break;
+	case RES_UPGRADE_2:
+		m_Technique += 25;
+		break;
+	case RES_UPGRADE_3:
+		m_Technique += 25;
+		break;
+	case RES_UPGRADE_4:
+		m_Technique += 30;
+		break;
+	case RES_UPGRADE_5:
+		m_Technique += 45;
+		break;
+	case RES_FOOD_1:
+		m_FoodFactor += 1.0f;
+		m_FoodExp += 0.1f;
+		break;
+	case RES_FOOD_2:
+		m_FoodFactor += 2.0f;
+		m_FoodExp += 0.15f;
+		break;
+	case RES_FOOD_3:
+		m_FoodFactor += 3.0f;
+		m_FoodExp += 0.2f;
+		break;
+	case RES_CIVIL_1:
+		m_CivilInc += 2;
+		break;
+	case RES_CIVIL_2:
+		m_CivilInc += 4;
+		break;
+	case RES_CULTURE_1:
+		m_CultureFactor += 1.0f;
+		break;
+	case RES_CULTURE_2:
+		m_CultureFactor += 1.0f;
+		break;
+	case RES_EDUCATION:
+		m_CivilInc += 1;
+		m_CultureFactor += 0.5f;
+		m_FoodFactor += 0.5f;
+	case RES_ECO_1:
+		m_EcoFactor += 10;
+		break;
+	case RES_ECO_2:
+		m_EcoFactor += 20;
+		break;
+	case RES_ECO_3:
+		m_EcoFactor += 40;
+		break;
+	}
+}
+
+int GameManager::getTechnique()
+{
+	return m_Technique;
+}
+
+void GameManager::simulatePopulation()
+{
+	float populationInc = sqrt(m_Civilization);
+	float populationFactor = 0.0f;
+	int totalTurn = 0;
+
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (m_RegionData[i].m_IsDeveloped)
+		{
+			int turn = m_Turn - m_RegionData[i].m_DevelopTurn;
+			totalTurn += turn;
+		}
+	}
+
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (m_RegionData[i].m_IsDeveloped)
+		{
+			float turn = m_Turn - m_RegionData[i].m_DevelopTurn;
+			float turnRatio = turn / totalTurn;
+			if (totalTurn == 0)
+			{
+				turnRatio = 1;
+			}
+			float stableFactor = 0.1f / m_RegionData[i].m_Stablity;
+			float radioactivityFactor = m_RegionData[i].m_Radioactivity / 10.0f;
+			float wealthFactor = 0.1f / m_RegionData[i].m_Wealthy;
+
+			populationInc += (wealthFactor - stableFactor - radioactivityFactor)*turnRatio;
+		}
+	}
+	m_Population += populationInc;
+}
+
+void GameManager::simulateFood()
+{
+	int foodIncrease = (8 * pow(m_Population, m_FoodExp) + m_Culture*0.001 + m_Civilization*0.01)*m_FoodFactor;
+	int minIncrease = foodIncrease * 0.9;
+	int maxIncrease = foodIncrease * 1.1;
+	int foodUp = minIncrease + rand() % (maxIncrease - minIncrease);
+
+	int foodDecrease = m_Population - m_Civilization*0.01 - m_Culture*0.01;
+
+	if (foodDecrease < m_Population * 0.1)
+	{
+		foodDecrease = m_Population * 0.1;
+	}
+
+	int minDecrease = foodDecrease * 0.9;
+	int maxDecrease = foodDecrease * 1.1;
+	int foodDown = minDecrease + rand() % (maxDecrease - minDecrease);
+
+	m_Food = m_Food + foodUp - foodDown;
+
+	//식량이 0이 되면 인구가 전 달의 80%로 줄어듬. 기타 등등 넣어야겠지만 일단 보류
+	if (m_Food < 0)
+	{
+		m_Food = 0;
+		m_Population *= 0.8;
+	}
+}
+
+void GameManager::simulateResource()
+{
+	float resourceIncrease = m_Civilization*0.001;
+
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (m_RegionData[i].m_IsDeveloped)
+		{
+			int turn = m_Turn - m_RegionData[i].m_DevelopTurn;
+			float wealthyFactor;
+
+			//개발된지 오래된 지역일 수록 더 많은 영향을 끼침.
+			if (turn > 100)
+			{
+				wealthyFactor = 1.2f;
+			}
+			else if (turn > 70)
+			{
+				wealthyFactor = 1.0f;
+			}
+			else if (turn > 50)
+			{
+				wealthyFactor = 0.8f;
+			}
+			else if (turn > 30)
+			{
+				wealthyFactor = 0.6f;
+			}
+			else if (turn > 10)
+			{
+				wealthyFactor = 0.4f;
+			}
+			else
+			{
+				wealthyFactor = 0.2f;
+			}
+
+			resourceIncrease += m_RegionData[i].m_Wealthy*wealthyFactor*0.5;
+		}
+	}
+
+	int minResInc = resourceIncrease * 0.9;
+	int maxResInc = resourceIncrease * 1.1;
+	int resInc = minResInc + rand() % (maxResInc - minResInc);
+
+	m_Resource += resInc;
+}
+
+void GameManager::simulateCulture()
+{
+	float cultureInc = m_Population * 0.01f;
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (m_RegionData[i].m_IsDeveloped)
+		{
+			int turn = m_Turn - m_RegionData[i].m_DevelopTurn;
+
+			cultureInc += turn * 0.01f;
+
+			if (m_RegionData[i].m_Wealthy >= 800)
+			{
+				cultureInc += turn * 0.01f;
+			}
+		}
+	}
+	cultureInc *= m_CultureFactor;
+	int minCulInc = cultureInc * 0.9f;
+	int maxCulInc = cultureInc * 1.1f;
+	int culInc = minCulInc + rand() % (maxCulInc - minCulInc);
+
+	m_Culture += culInc;
+}
+
+void GameManager::simulateCivilization()
+{
+	int civilInc = m_CivilInc;
+
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		if (m_RegionData[i].m_IsDeveloped)
+		{
+			if (m_RegionData[i].m_Radioactivity <= 50)
+			{
+				civilInc++;
+			}
+
+			if (m_RegionData[i].m_Wealthy >= 800)
+			{
+				civilInc++;
+			}
+
+			if (m_RegionData[i].m_Stablity >= 500)
+			{
+				civilInc++;
+			}
+
+			int turn = m_Turn - m_RegionData[i].m_DevelopTurn;
+
+			if (turn > 100)
+			{
+				civilInc += 2;
+			}
+			else if (turn > 50)
+			{
+				civilInc++;
+			}
+
+		}
+	}
+
+	m_Civilization += civilInc;
+}
+
+void GameManager::simulateTechnique()
+{
+	int technique = m_Technique + m_Civilization * 0.01;
+	int minTechnique = technique * 0.9;
+	int maxTechnique = technique * 1.1;
+	int nowTechnique = minTechnique + rand() % (maxTechnique - minTechnique);
+
+	if (m_Research != RES_NONE)
+	{
+		m_ResearchData[m_Research].m_Progress += nowTechnique;
+		m_Resource -= m_ResearchData[m_Research].m_NeedResource;
+
+		if (m_ResearchData[m_Research].m_Progress >= m_ResearchData[m_Research].m_NeedPeriod)
+		{
+			m_ResearchData[m_Research].m_IsCompleted = true;
+			completeResearch(m_Research);
+			char content[255];
+			sprintf(content, "%s 기술의 연구가 완료되었습니다.", m_ResearchData[m_Research].m_Name.c_str());
+			ReportData report("연구 완료", content, m_Year, m_Month);
+			addReport(report);
+		}
+	}
+}
+
+void GameManager::simulateRegion()
+{
+	//조사, 개척 결과 생성
+
+
+	//조사는 거리 + 센티넬에만 영향 받는다.
+	if (m_SurveyRegion != RT_NONE)
+	{
+		int distance = m_RegionData[m_SurveyRegion].getDistance();
+		float success = 0.8f / distance;
+
+		//센티넬 개발됐으면 무조건 성공률 10% 상승
+		if (m_ResearchData[RES_SENTINEL].m_IsCompleted)
+		{
+			success += 0.1f;
+		}
+
+		int rate = success * 1000;
+
+		//성공
+		if (rand() % 1000 < rate)
+		{
+			m_RegionData[m_SurveyRegion].m_IsKnown = true;
+
+			std::string content = m_RegionData[m_SurveyRegion].m_Name + "지역의 탐사에 성공했습니다. 이제 이 지역의 환경 정보 등을 확인할 수 있으며, 지역의 개척도 가능합니다.";
+
+			ReportData report("탐사 성공", content, m_Year, m_Month);
+
+			addReport(report);
+		}
+		else
+		{
+			//실패한 경우 거리에 비례해서 더 많은 손실을 입음. 자기가 가진 재산 현황에 비례해서 타격을 입는다.
+			int populationDesc = 20 + m_Population * 0.1f * distance;
+			int foodDesc = 40 + m_Food * 0.1f * distance;
+			int resourceDesc = 10 + m_Resource*0.1f * distance;
+
+			if (m_ResearchData[RES_SENTINEL].m_IsCompleted)
+			{
+				populationDesc = 0;
+				foodDesc = 0;
+			}
+
+			m_Population -= populationDesc;
+			m_Food -= foodDesc;
+			m_Resource -= resourceDesc;
+
+			char content[255];
+			sprintf(content, "%s 지역의 탐사에 실패했습니다... 그 과정에서 %d명의 사람이 죽었고,"
+				"%d만큼의 식량이 손실됐으며, %d만큼의 자원도 잃었습니다. 정말 안타깝군요...", m_RegionData[m_SurveyRegion].m_Name.c_str(),
+				populationDesc, foodDesc, resourceDesc);
+
+			ReportData report("탐사 실패", content, m_Year, m_Month);
+			addReport(report);
+		}
+	}
+}
+
+void GameManager::simulateEvent()
+{
+
+}
+
+void GameManager::setSurveyRegion(RegionType type)
+{
+	m_SurveyRegion = type;
+}
+
+void GameManager::setDevelopRegion(RegionType type)
+{
+	m_DevelopRegion = type;
+}
+
+RegionType GameManager::getSurveyRegion()
+{
+	return m_SurveyRegion;
+}
+
+RegionType GameManager::getDevelopRegion()
+{
+	return m_DevelopRegion;
+}
+
+void GameManager::initRegionDistance()
+{
+	for (int i = 0; i < RT_NUM; i++)
+	{
+		m_RegionData[i].m_Distance = -1;
+	}
 }

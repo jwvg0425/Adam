@@ -15,7 +15,7 @@ struct ResearchData
 	int m_Progress;
 
 	bool m_IsCompleted;
-	std::vector<ResearchData> m_NeedResearch;
+	std::vector<ResearchData*> m_NeedResearch;
 
 	ResearchData();
 	ResearchData(const std::string& name, const std::string& description,

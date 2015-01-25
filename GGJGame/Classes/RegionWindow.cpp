@@ -12,6 +12,7 @@ RegionWindow::RegionWindow()
 	m_NameLabel = nullptr;
 	m_DescLabel = nullptr;
 	m_ActLabel = nullptr;
+	m_StateLabel = nullptr;
 }
 
 RegionWindow::~RegionWindow()
@@ -46,6 +47,11 @@ bool RegionWindow::init()
 	button->addChild(m_ActLabel);
 	m_ActMenu = Menu::create(button, nullptr);
 
+	m_StateLabel = Label::createWithSystemFont("", TEXT_FONT, 12);
+	m_StateLabel->setColor(TEXT_COLOR);
+	m_StateLabel->setAnchorPoint(Point(0, 1));
+	addChild(m_StateLabel);
+
 	addChild(m_ActMenu);
 
 	return true;
@@ -64,6 +70,8 @@ void RegionWindow::updateInfo(RegionType type)
 	float descY;
 	float buttonX;
 	float buttonY;
+	float stateX;
+	float stateY;
 
 	if (x + 160 > WND_WIDTH)
 	{
@@ -71,12 +79,14 @@ void RegionWindow::updateInfo(RegionType type)
 		nameX = -150;
 		descX = -150;
 		buttonX = -80;
+		stateX = -150;
 	}
 	else
 	{
 		anchorX = 0.0f;
 		nameX = 10;
 		descX = 10;
+		stateX = 10;
 		buttonX = 80;
 	}
 
@@ -85,6 +95,7 @@ void RegionWindow::updateInfo(RegionType type)
 		anchorY = 1.0f;
 		nameY = -30;
 		descY = -70;
+		stateY = -120;
 		buttonY = -166;
 	}
 	else
@@ -92,6 +103,7 @@ void RegionWindow::updateInfo(RegionType type)
 		anchorY = 0.0f;
 		nameY = 162;
 		descY = 122;
+		stateY = 72;
 		buttonY = 26;
 	}
 
@@ -99,6 +111,9 @@ void RegionWindow::updateInfo(RegionType type)
 
 	m_NameLabel->setString(data.m_Name);
 	m_NameLabel->setPosition(nameX, nameY);
+
+	m_StateLabel->setPosition(stateX, stateY);
+	m_StateLabel->setVisible(true);
 	
 	char desc[256] = { 0, };
 	auto color = data.getStateColor();
@@ -107,11 +122,39 @@ void RegionWindow::updateInfo(RegionType type)
 	{
 		m_DescLabel->setString("정보 없음");
 		m_ActMenu->setVisible(true);
+		RegionType survey = GameManager::getInstance()->getSurveyRegion();
+
+		if (survey != RT_NONE)
+		{
+			auto data = GameManager::getInstance()->getRegionData(survey);
+			std::string state = "조사 예정 지역:\n" + data.m_Name;
+
+			m_StateLabel->setString(state);
+		}
+		else
+		{
+			m_StateLabel->setString("");
+		}
+
 		m_ActLabel->setString("조사");
 	}
 	else
 	{
 		std::string state;
+
+		RegionType develop = GameManager::getInstance()->getDevelopRegion();
+
+		if (develop != RT_NONE)
+		{
+			auto data = GameManager::getInstance()->getRegionData(develop);
+			std::string state = "개척 예정 지역:\n" + data.m_Name;
+
+			m_StateLabel->setString(state);
+		}
+		else
+		{
+			m_StateLabel->setString("");
+		}
 
 		if (color == REGION_DANGER)
 		{
@@ -135,6 +178,7 @@ void RegionWindow::updateInfo(RegionType type)
 		{
 			state = "거주 구역";
 			m_ActMenu->setVisible(false);
+			m_StateLabel->setVisible(false);
 		}
 
 		sprintf(desc, "상태 : %s\n"
@@ -155,15 +199,26 @@ void RegionWindow::updateInfo(RegionType type)
 
 void RegionWindow::buttonCallback(cocos2d::Ref* sender)
 {
-
-}
-
-void RegionWindow::exitButtonCallback(cocos2d::Ref* sender)
-{
-	setVisible(false);
 	auto parent = static_cast<MapTab*>(getParent());
 
-	parent->initSelectedRegion();
+	if (m_ActLabel->getString() == "조사")
+	{
+		GameManager::getInstance()->setSurveyRegion(parent->getSelectedRegion());
+
+		auto data = GameManager::getInstance()->getRegionData(parent->getSelectedRegion());
+		std::string state = "조사 예정 지역:\n" + data.m_Name;
+
+		m_StateLabel->setString(state);
+	}
+	else
+	{
+		GameManager::getInstance()->setDevelopRegion(parent->getSelectedRegion());
+
+		auto data = GameManager::getInstance()->getRegionData(parent->getSelectedRegion());
+		std::string state = "개척 예정 지역:\n" + data.m_Name;
+
+		m_StateLabel->setString(state);
+	}
 }
 
 cocos2d::Rect RegionWindow::getButtonRect()

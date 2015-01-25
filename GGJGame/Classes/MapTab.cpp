@@ -182,3 +182,8 @@ void MapTab::initSelectedRegion()
 {
 	m_SelectedRegion = -1;
 }
+
+RegionType MapTab::getSelectedRegion()
+{
+	return static_cast<RegionType>(m_SelectedRegion);
+}

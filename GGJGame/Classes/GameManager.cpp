@@ -28,6 +28,8 @@ void GameManager::releaseInstance()
 
 GameManager::GameManager()
 {
+	srand((unsigned)time(nullptr));
+
 	m_Civilization = 0;
 	m_Culture = 0;
 	m_Population = 507;
@@ -469,6 +471,16 @@ void GameManager::simulate()
 	m_Research = RES_NONE;
 	m_DevelopRegion = RT_NONE;
 	m_SurveyRegion = RT_NONE;
+
+	if (m_ResearchData[RES_EDUCATION].m_IsCompleted)
+	{
+		m_Technique++;
+	
+		if (m_Turn % 2 == 0)
+		{
+			m_EcoFactor++;
+		}
+	}
 }
 
 int GameManager::getTurn()
@@ -1008,7 +1020,7 @@ void GameManager::simulateEvent()
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
-						"이 질병으로 인해 %명의 사상자가 발생했습니다.", data.m_Name.c_str(), popl);
+						"이 질병으로 인해 %d명의 사상자가 발생했습니다.", data.m_Name.c_str(), popl);
 
 					ReportData report("질병 발생", content, m_Year, m_Month);
 					addReport(report);
@@ -1031,7 +1043,7 @@ void GameManager::simulateEvent()
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
-						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 살상력이 높아 굉장히 위험하기 때문에 빠른 대처가 필요할 것으로 보입니다.", data.m_Name.c_str(), popl);
+						"이 질병으로 인해 %d명의 사상자가 발생했습니다. 이 질병은 살상력이 높아 굉장히 위험하기 때문에 빠른 대처가 필요할 것으로 보입니다.", data.m_Name.c_str(), popl);
 
 					ReportData report("질병 발생", content, m_Year, m_Month);
 					addReport(report);
@@ -1054,7 +1066,7 @@ void GameManager::simulateEvent()
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
-						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 살상력이 높고, 또 전염력도 굉장히 높은 것으로 보입니다."
+						"이 질병으로 인해 %d명의 사상자가 발생했습니다. 이 질병은 살상력이 높고, 또 전염력도 굉장히 높은 것으로 보입니다."
 						"빨리 대처하지 않으면 모든 인류가 이 질병으로 인해 멸망할지도 모릅니다.", data.m_Name.c_str(), popl);
 
 					ReportData report("질병 발생", content, m_Year, m_Month);
@@ -1078,7 +1090,7 @@ void GameManager::simulateEvent()
 					char content[255];
 
 					sprintf(content, "%s 지역에서 정체 불명의 질병이 발생했습니다."
-						"이 질병으로 인해 %명의 사상자가 발생했습니다. 이 질병은 여태껏 관찰된 모든 병균을 훨씬 뛰어넘는 극악의 살상력과 전염성을 갖고 있습니다."
+						"이 질병으로 인해 %d명의 사상자가 발생했습니다. 이 질병은 여태껏 관찰된 모든 병균을 훨씬 뛰어넘는 극악의 살상력과 전염성을 갖고 있습니다."
 						"빠른 대처가 필요합니다.", data.m_Name.c_str(), popl);
 
 					ReportData report("질병 발생", content, m_Year, m_Month);

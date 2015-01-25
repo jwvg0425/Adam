@@ -46,7 +46,6 @@ bool GameScene::init()
 	addChild(m_MainUILayer);
 	m_MainUILayer->setVisible(false);
 
-	srand((unsigned)time(nullptr));
 	scheduleUpdate();
 	
 	return true;

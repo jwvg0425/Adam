@@ -103,14 +103,15 @@ int RegionData::getDistance()
 			if (region->m_Neighbor[i]->m_Distance == -1)
 			{
 				dataQueue.push(region->m_Neighbor[i]);
-			}
 
-			region->m_Neighbor[i]->m_Distance = region->m_Distance + 1;
+				region->m_Neighbor[i]->m_Distance = region->m_Distance + 1;
 
-			if (region->m_Neighbor[i]->m_IsDeveloped)
-			{
-				return region->m_Neighbor[i]->m_Distance;
-			}
+				if (region->m_Neighbor[i]->m_IsDeveloped)
+				{
+					CCLOG("%d", region->m_Neighbor[i]->m_Distance);
+					return region->m_Neighbor[i]->m_Distance;
+				}
+			}			
 		}
 	}
 

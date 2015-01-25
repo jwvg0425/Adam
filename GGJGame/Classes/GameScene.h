@@ -19,12 +19,15 @@ public:
     CREATE_FUNC(GameScene);
 
 	void setMainUIVisible(bool visible);
-	void gameStartAction();
-	void startGame(cocos2d::Node* sender);
+	void turnStartAction();
+	void turnEndAction();
+	void turnChat();
+	void startTurn(cocos2d::Node* sender);
 
 private:
 	cocos2d::Sprite* m_Black;
 	MainUILayer* m_MainUILayer;
+	bool m_FirstTurn;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

@@ -15,6 +15,7 @@ public:
 	void updateInfo(RegionType type);
 	void buttonCallback(cocos2d::Ref* sender);
 	void exitButtonCallback(cocos2d::Ref* sender);
+	cocos2d::Rect getButtonRect();
 
 	CREATE_FUNC(RegionWindow);
 private:
@@ -23,6 +24,7 @@ private:
 	cocos2d::Menu* m_ActMenu;
 	cocos2d::Label* m_NameLabel;
 	cocos2d::Label* m_DescLabel;
+	cocos2d::Label* m_ActLabel;
 };
 
 #endif

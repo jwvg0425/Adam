@@ -112,7 +112,7 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 
 		runningLayer->addChild(
 			ChatWindow::createWithCallback(firstChat, 
-			CC_CALLBACK_0(GameScene::gameStartAction, static_cast<GameScene*>(runningLayer)), 8.0f));
+			CC_CALLBACK_0(GameScene::turnStartAction, static_cast<GameScene*>(runningLayer)), 8.0f));
 	}
 	else
 	{
@@ -123,6 +123,12 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 			m_Month = 1;
 			m_Year++;
 		}
+
+		m_PrevPopulation = m_Population;
+		m_PrevFood = m_Food;
+		m_PrevResource = m_Resource;
+		m_PrevCulture = m_Culture;
+		m_PrevCivilization = m_Civilization;
 
 		//이전 달까지의 상황을 바탕으로 시뮬레이트.
 		simulate();
@@ -136,7 +142,9 @@ void GameManager::turnStart(cocos2d::Layer* runningLayer)
 
 void GameManager::turnEnd(cocos2d::Layer* runningLayer)
 {
-	turnStart(runningLayer);
+	auto layer = static_cast<GameScene*>(runningLayer);
+
+	layer->turnEndAction();
 }
 
 void GameManager::setChatting(bool chat)
@@ -178,6 +186,97 @@ void GameManager::initRegion()
 	m_RegionData[RT_KOREA].m_Radioactivity = 100;
 	m_RegionData[RT_KOREA].m_Stablity = 200;
 	m_RegionData[RT_KOREA].m_Wealthy = 50;
+
+	m_RegionData[RT_KOREA].m_Neighbor.push_back(&m_RegionData[RT_CHINA]);
+	m_RegionData[RT_KOREA].m_Neighbor.push_back(&m_RegionData[RT_JAPAN]);
+
+	m_RegionData[RT_JAPAN].m_Neighbor.push_back(&m_RegionData[RT_KOREA]);
+	m_RegionData[RT_JAPAN].m_Neighbor.push_back(&m_RegionData[RT_NORTH_ASIA]);
+
+	m_RegionData[RT_CHINA].m_Neighbor.push_back(&m_RegionData[RT_KOREA]);
+	m_RegionData[RT_CHINA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_EAST_ASIA]);
+	m_RegionData[RT_CHINA].m_Neighbor.push_back(&m_RegionData[RT_INDO]);
+	m_RegionData[RT_CHINA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_ASIA]);
+
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_KOREA]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_JAPAN]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_CHINA]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_ALASKA_CANADA]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_EUROPE]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_WEST_ASIA]);
+	m_RegionData[RT_NORTH_ASIA].m_Neighbor.push_back(&m_RegionData[RT_INDO]);
+
+	m_RegionData[RT_SOUTH_EAST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_CHINA]);
+	m_RegionData[RT_SOUTH_EAST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_INDO]);
+	m_RegionData[RT_SOUTH_EAST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_OCEANIA]);
+
+	m_RegionData[RT_INDO].m_Neighbor.push_back(&m_RegionData[RT_CHINA]);
+	m_RegionData[RT_INDO].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_EAST_ASIA]);
+	m_RegionData[RT_INDO].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_WEST_ASIA]);
+
+	m_RegionData[RT_ALASKA_CANADA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_ASIA]);
+	m_RegionData[RT_ALASKA_CANADA].m_Neighbor.push_back(&m_RegionData[RT_GREENLAND]);
+	m_RegionData[RT_ALASKA_CANADA].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AMERICA]);
+
+	m_RegionData[RT_EUROPE].m_Neighbor.push_back(&m_RegionData[RT_NORTH_ASIA]);
+	m_RegionData[RT_EUROPE].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_WEST_ASIA]);
+	m_RegionData[RT_EUROPE].m_Neighbor.push_back(&m_RegionData[RT_NORTH_AFRICA]);
+	m_RegionData[RT_EUROPE].m_Neighbor.push_back(&m_RegionData[RT_GREENLAND]);
+
+	m_RegionData[RT_SOUTH_WEST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_ASIA]);
+	m_RegionData[RT_SOUTH_WEST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_INDO]);
+	m_RegionData[RT_SOUTH_WEST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_EUROPE]);
+	m_RegionData[RT_SOUTH_WEST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_AFRICA]);
+	m_RegionData[RT_SOUTH_WEST_ASIA].m_Neighbor.push_back(&m_RegionData[RT_EAST_AFRICA]);
+
+	m_RegionData[RT_OCEANIA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_EAST_ASIA]);
+
+	m_RegionData[RT_GREENLAND].m_Neighbor.push_back(&m_RegionData[RT_ALASKA_CANADA]);
+	m_RegionData[RT_GREENLAND].m_Neighbor.push_back(&m_RegionData[RT_EUROPE]);
+	m_RegionData[RT_GREENLAND].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AMERICA]);
+
+	m_RegionData[RT_CENTRAL_AMERICA].m_Neighbor.push_back(&m_RegionData[RT_GREENLAND]);
+	m_RegionData[RT_CENTRAL_AMERICA].m_Neighbor.push_back(&m_RegionData[RT_ALASKA_CANADA]);
+	m_RegionData[RT_CENTRAL_AMERICA].m_Neighbor.push_back(&m_RegionData[RT_MEXICO]);
+
+	m_RegionData[RT_NORTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_EUROPE]);
+	m_RegionData[RT_NORTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_WEST_ASIA]);
+	m_RegionData[RT_NORTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AFRICA]);
+	m_RegionData[RT_NORTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_WEST_AFRICA]);
+	m_RegionData[RT_NORTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_EAST_AFRICA]);
+
+	m_RegionData[RT_EAST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_WEST_ASIA]);
+	m_RegionData[RT_EAST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_AFRICA]);
+	m_RegionData[RT_EAST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AFRICA]);
+	m_RegionData[RT_EAST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_AFRICA]);
+
+	m_RegionData[RT_MEXICO].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AMERICA]);
+	m_RegionData[RT_MEXICO].m_Neighbor.push_back(&m_RegionData[RT_CARIBBEAN]);
+
+	m_RegionData[RT_CENTRAL_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_AFRICA]);
+	m_RegionData[RT_CENTRAL_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_EAST_AFRICA]);
+	m_RegionData[RT_CENTRAL_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_WEST_AFRICA]);
+	m_RegionData[RT_CENTRAL_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_AFRICA]);
+
+	m_RegionData[RT_WEST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_NORTH_AFRICA]);
+	m_RegionData[RT_WEST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AFRICA]);
+	m_RegionData[RT_WEST_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_BRAZIL]);
+
+	m_RegionData[RT_SOUTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_EAST_AFRICA]);
+	m_RegionData[RT_SOUTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_CENTRAL_AFRICA]);
+	m_RegionData[RT_SOUTH_AFRICA].m_Neighbor.push_back(&m_RegionData[RT_BRAZIL]);
+
+	m_RegionData[RT_CARIBBEAN].m_Neighbor.push_back(&m_RegionData[RT_MEXICO]);
+	m_RegionData[RT_CARIBBEAN].m_Neighbor.push_back(&m_RegionData[RT_BRAZIL]);
+	m_RegionData[RT_CARIBBEAN].m_Neighbor.push_back(&m_RegionData[RT_ARGENTINA_CHILE]);
+
+	m_RegionData[RT_BRAZIL].m_Neighbor.push_back(&m_RegionData[RT_WEST_AFRICA]);
+	m_RegionData[RT_BRAZIL].m_Neighbor.push_back(&m_RegionData[RT_SOUTH_AFRICA]);
+	m_RegionData[RT_BRAZIL].m_Neighbor.push_back(&m_RegionData[RT_CARIBBEAN]);
+	m_RegionData[RT_BRAZIL].m_Neighbor.push_back(&m_RegionData[RT_ARGENTINA_CHILE]);
+
+	m_RegionData[RT_ARGENTINA_CHILE].m_Neighbor.push_back(&m_RegionData[RT_CARIBBEAN]);
+	m_RegionData[RT_ARGENTINA_CHILE].m_Neighbor.push_back(&m_RegionData[RT_BRAZIL]);
 }
 
 const RegionData& GameManager::getRegionData(RegionType type)
@@ -309,17 +408,17 @@ void GameManager::addRegularReport()
 	char reportContents[1024];
 
 	sprintf(reportHeader, "%d년%d월 정기보고서", m_Year, m_Month);
-	sprintf(reportContents, "저번 달 대비 변화는 다음과 같습니다.\n"
+	sprintf(reportContents, "지난 달 대비 변화는 다음과 같습니다.\n "
 		"인구: %d -> %d\n"
 		"식량: %d -> %d\n"
 		"자원: %d -> %d\n"
 		"문화: %d -> %d\n"
 		"문명: %d -> %d\n",
-		m_Population, m_Population,
-		m_Food, m_Food,
-		m_Resource, m_Resource,
-		m_Culture, m_Culture,
-		m_Civilization, m_Civilization);
+		m_PrevPopulation, m_Population,
+		m_PrevFood, m_Food,
+		m_PrevResource, m_Resource,
+		m_PrevCulture, m_Culture,
+		m_PrevCivilization, m_Civilization);
 
 	ReportData report(reportHeader, reportContents, m_Year, m_Month);
 
@@ -340,4 +439,9 @@ void GameManager::simulate()
 {
 	//초기화 작업
 	m_Research = RES_NONE;
+}
+
+int GameManager::getTurn()
+{
+	return m_Turn;
 }

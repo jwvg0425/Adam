@@ -2,6 +2,7 @@
 #include "MainUILayer.h"
 #include "macro.h"
 #include "GameManager.h"
+#include "ChatWindow.h"
 
 USING_NS_CC;
 
@@ -44,6 +45,7 @@ bool GameScene::init()
 	m_MainUILayer = MainUILayer::create();
 	addChild(m_MainUILayer);
 	m_MainUILayer->setVisible(false);
+	m_FirstTurn = true;
 
 	scheduleUpdate();
 	
@@ -55,19 +57,65 @@ void GameScene::setMainUIVisible(bool visible)
 	m_MainUILayer->setVisible(visible);
 }
 
-void GameScene::gameStartAction()
+void GameScene::turnStartAction()
 {
 	auto firstDelay = DelayTime::create(1);
-	auto blackFade = FadeOut::create(4);
+	auto blackFade = FadeOut::create(2);
 	auto delay = DelayTime::create(1);
-	auto callback = CallFuncN::create(CC_CALLBACK_1(GameScene::startGame, this));
+	auto callback = CallFuncN::create(CC_CALLBACK_1(GameScene::startTurn, this));
 	auto action = Sequence::create(firstDelay, blackFade, delay, callback,nullptr);
+	m_Black->runAction(action);
+}
+
+void GameScene::startTurn(cocos2d::Node* sender)
+{
+	setMainUIVisible(true);
+	m_Black->removeFromParent();
+
+	if (!m_FirstTurn)
+	{
+		GameManager::getInstance()->turnStart(this);
+	}
+
+	m_FirstTurn = false;
+}
+
+void GameScene::turnEndAction()
+{
+	setMainUIVisible(false);
+
+	m_Black = Sprite::create("black.png");
+	m_Black->setOpacity(0);
+	m_Black->setPosition(WND_WIDTH / 2, WND_HEIGHT / 2);
+
+	addChild(m_Black);
+
+	auto firstDelay = DelayTime::create(1);
+	auto blackFade = FadeIn::create(2);
+	auto delay = DelayTime::create(2);
+	auto callback = CallFuncN::create(CC_CALLBACK_0(GameScene::turnChat, this));
+	auto action = Sequence::create(firstDelay, blackFade, delay, callback, nullptr);
 
 	m_Black->runAction(action);
 }
 
-void GameScene::startGame(cocos2d::Node* sender)
+
+void GameScene::turnChat()
 {
-	setMainUIVisible(true);
-	m_Black->removeFromParent();
+	std::vector<std::string> chatList =
+	{
+		"아담, 깨어날 시간입니다.",
+		"아담, 저희는 올바른 방향으로 잘 나아가고 있는 것이겠지요?",
+		"아담, 이번에는 무엇을 해야 할까요?",
+		"아담, 제발 저희를 살려주십시오.",
+		"아담, 우리는 언제쯤 예전과 같은 생활로 돌아갈 수 있을까요?"
+	};
+
+	std::vector <std::string> chat;
+
+	chat.push_back(chatList[rand() % chatList.size()]);
+
+	ChatWindow* chatWindow = ChatWindow::createWithCallback(chat, CC_CALLBACK_0(GameScene::turnStartAction, this));
+
+	addChild(chatWindow);
 }

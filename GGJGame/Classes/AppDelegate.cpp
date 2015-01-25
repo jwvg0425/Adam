@@ -19,18 +19,20 @@ bool AppDelegate::applicationDidFinishLaunching() {
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if(!glview) {
-        glview = GLView::createWithRect("GGJGame",Rect(0,0,WND_WIDTH,WND_HEIGHT));
+        glview = GLView::createWithRect("Adam",Rect(0,0,WND_WIDTH,WND_HEIGHT));
         director->setOpenGLView(glview);
     }
 
     // turn on display FPS
-    director->setDisplayStats(false);
+    director->setDisplayStats(true);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
 
     // create a scene. it's an autorelease object
     auto scene = GameScene::createScene();
+
+	srand((unsigned)time(nullptr));
 
     // run
     director->runWithScene(scene);

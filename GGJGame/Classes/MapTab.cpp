@@ -125,6 +125,7 @@ void MapTab::onMouseDown(cocos2d::Event* event)
 {
 	EventMouse* e = static_cast <EventMouse*>(event);
 	Point cursor(e->getCursorX() - MAP_ORIGIN_X, -WND_HEIGHT - e->getCursorY() + MAP_ORIGIN_Y);
+	Rect buttonRect = m_RegionWindow->getButtonRect();
 	int downedRegion = -1;
 
 	if (!m_Sea->isVisible())
@@ -132,6 +133,10 @@ void MapTab::onMouseDown(cocos2d::Event* event)
 		return;
 	}
 
+	if (m_RegionWindow->isVisible() && buttonRect.containsPoint(Point(cursor.x + MAP_ORIGIN_X, -cursor.y + MAP_ORIGIN_Y)))
+	{
+		return;
+	}
 
 	//왼쪽 클릭만 받아줍니다
 	if (e->getMouseButton() != MOUSE_BUTTON_LEFT)

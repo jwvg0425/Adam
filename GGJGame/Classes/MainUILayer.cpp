@@ -221,7 +221,7 @@ void MainUILayer::reportButtonCallback(cocos2d::Ref* sender)
 
 void MainUILayer::nextMonthButtonCallback(cocos2d::Ref* sender)
 {
-	GameManager::getInstance()->turnEnd(this);
+	GameManager::getInstance()->turnEnd(static_cast<Layer*>(getParent()));
 }
 
 void MainUILayer::setUIVisible(bool visible)

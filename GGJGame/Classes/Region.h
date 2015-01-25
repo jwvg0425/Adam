@@ -19,6 +19,7 @@ struct RegionData
 	int m_Radioactivity;
 	int m_Wealthy;
 	int m_Stablity;
+	std::vector<RegionData*> m_Neighbor;
 };
 
 class Region : public cocos2d::Node

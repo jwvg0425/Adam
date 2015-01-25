@@ -33,6 +33,7 @@ public:
 	void								setResearch(ResearchType type);
 	ResearchType						getResearch();
 	void								simulate();
+	int									getTurn();
 
 private:
 	GameManager();
@@ -48,8 +49,16 @@ private:
 	int m_Resource;
 	int m_Culture;
 	int m_Civilization;
+
 	int m_Year;
 	int m_Month;
+
+	int m_PrevPopulation;
+	int m_PrevFood;
+	int m_PrevResource;
+	int m_PrevCulture;
+	int m_PrevCivilization;
+
 	bool m_IsChatting;
 	ResearchType m_Research;
 

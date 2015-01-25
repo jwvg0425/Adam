@@ -11,6 +11,7 @@ RegionWindow::RegionWindow()
 	m_BackgroundImage = nullptr;
 	m_NameLabel = nullptr;
 	m_DescLabel = nullptr;
+	m_ActLabel = nullptr;
 }
 
 RegionWindow::~RegionWindow()
@@ -39,6 +40,14 @@ bool RegionWindow::init()
 	m_DescLabel->setAnchorPoint(Point(0, 1));
 	addChild(m_DescLabel);
 
+	auto button = MenuItemImage::create("button.png", "button.png", CC_CALLBACK_1(RegionWindow::buttonCallback, this));
+	m_ActLabel = Label::createWithSystemFont("개척", TEXT_FONT, 16);
+	m_ActLabel->setPosition(48, 16);
+	button->addChild(m_ActLabel);
+	m_ActMenu = Menu::create(button, nullptr);
+
+	addChild(m_ActMenu);
+
 	return true;
 }
 
@@ -53,32 +62,40 @@ void RegionWindow::updateInfo(RegionType type)
 	float nameY;
 	float descX;
 	float descY;
+	float buttonX;
+	float buttonY;
 
 	if (x + 160 > WND_WIDTH)
 	{
 		anchorX = 1.0f;
 		nameX = -150;
 		descX = -150;
+		buttonX = -80;
 	}
 	else
 	{
 		anchorX = 0.0f;
 		nameX = 10;
 		descX = 10;
+		buttonX = 80;
 	}
 
 	if (y + 192 > WND_HEIGHT)
 	{
 		anchorY = 1.0f;
 		nameY = -30;
-		descY = -50;
+		descY = -70;
+		buttonY = -166;
 	}
 	else
 	{
 		anchorY = 0.0f;
 		nameY = 162;
-		descY = 142;
+		descY = 122;
+		buttonY = 26;
 	}
+
+	m_ActMenu->setPosition(buttonX, buttonY);
 
 	m_NameLabel->setString(data.m_Name);
 	m_NameLabel->setPosition(nameX, nameY);
@@ -89,6 +106,8 @@ void RegionWindow::updateInfo(RegionType type)
 	if (color == REGION_UNKNOWN)
 	{
 		m_DescLabel->setString("정보 없음");
+		m_ActMenu->setVisible(true);
+		m_ActLabel->setString("조사");
 	}
 	else
 	{
@@ -97,18 +116,25 @@ void RegionWindow::updateInfo(RegionType type)
 		if (color == REGION_DANGER)
 		{
 			state = "미개척 구역(위험)";
+			m_ActMenu->setVisible(true);
+			m_ActLabel->setString("개척");
 		}
 		else if (color == REGION_CAUTION)
 		{
 			state = "미개척 구역(주의)";
+			m_ActMenu->setVisible(true);
+			m_ActLabel->setString("개척");
 		}
 		else if (color == REGION_SAFE)
 		{
 			state = "미개척 구역(안전)";
+			m_ActMenu->setVisible(true);
+			m_ActLabel->setString("개척");
 		}
 		else
 		{
 			state = "거주 구역";
+			m_ActMenu->setVisible(false);
 		}
 
 		sprintf(desc, "상태 : %s\n"
@@ -138,4 +164,12 @@ void RegionWindow::exitButtonCallback(cocos2d::Ref* sender)
 	auto parent = static_cast<MapTab*>(getParent());
 
 	parent->initSelectedRegion();
+}
+
+cocos2d::Rect RegionWindow::getButtonRect()
+{
+	float x = getPositionX() + m_ActMenu->getPositionX();
+	float y = getPositionY() + m_ActMenu->getPositionY();
+
+	return Rect(x - 48, y - 16, 96, 32);
 }

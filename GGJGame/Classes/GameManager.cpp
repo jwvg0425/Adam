@@ -1141,7 +1141,7 @@ bool GameManager::testGameClear()
 {
 
 	//갖춰야 하는 스탯
-	if (m_Population < 20000)
+	if (m_Population < 5000)
 	{
 		return false;
 	}
@@ -1151,22 +1151,15 @@ bool GameManager::testGameClear()
 		return false;
 	}
 
-	if (m_Culture < 5000)
+	if (m_Culture < 2000)
 	{
 		return false;
 	}
 
-	//모든 지역이 열려있어야하고, 일정 수준 이상을 갖춰야 함.
+	//모든 지역이 열려있어야하함.
 	for (int i = 0; i < RT_NUM; i++)
 	{
 		if (!m_RegionData[i].m_IsDeveloped)
-		{
-			return false;
-		}
-
-		if (m_RegionData[i].m_Radioactivity >= 100 ||
-			m_RegionData[i].m_Stablity < 400 ||
-			m_RegionData[i].m_Wealthy < 600)
 		{
 			return false;
 		}

@@ -1,2 +1,2 @@
-# GGJGame2015
+# Adam
 Global Game Jame Game 2015
